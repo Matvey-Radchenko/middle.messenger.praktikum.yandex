@@ -1,0 +1,9 @@
+:root {
+    --primary-color: #6200ea;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: var(--primary-color);
+    color: white;
+}
