@@ -1,0 +1,13 @@
+<div class='modal-backdrop'>
+    <div class='modal'>
+        <h3>{{title}}</h3>
+        <form id={{formId}} class="modal_form">
+			{{#each fields}}
+				{{> Input this}}
+			{{/each}}
+        </form>
+        {{#each buttons }}
+		    {{> Button this}}
+        {{/each}}
+    </div>
+</div>

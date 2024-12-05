@@ -1,7 +1,11 @@
-console.log("Chat App is running!");
+import { App } from './app/App';
+import Handlebars from 'handlebars';
+import { Input, Button } from '@shared/index';
 
-document.getElementById("app")!.innerHTML = `
-	<div>
-		<h1>Hello world!</h1>
-	</div>
-`;
+Handlebars.registerPartial('Input', Input);
+Handlebars.registerPartial('Button', Button);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const app = new App();
+    app.render();
+});
