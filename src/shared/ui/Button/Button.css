@@ -5,25 +5,32 @@
     border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.1s ease;
 
     &.primary {
         background-color: var(--primary-color);
-        color: #fff;
+        color: var(--text-color-inverted);
+
+        &:hover {
+            background-color: var(--primary-color-hover);
+        }
+
+        &:active {
+            background-color: var(--primary-color-active);
+        }
     }
 
     &.secondary {
-        background-color: #fff;
+        background-color: var(--secondary-color);
         color: var(--primary-color);
         border: 1px solid var(--primary-color);
-    }
-
-    &.link {
-        background-color: transparent;
-        color: var(--primary-color);
 
         &:hover {
-            text-decoration: underline;
+            background-color: var(--secondary-color-hover);
+        }
+
+        &:active {
+            background-color: var(--secondary-color-active);
         }
     }
 }

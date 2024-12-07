@@ -9,13 +9,13 @@
     outline: none;
     padding: 8px 0;
     background: none;
-}
 
-.text-input::placeholder {
-    color: #999999;
-    font-weight: 400;
-}
+    &::placeholder {
+        color: #999999;
+        font-weight: 400;
+    }
 
-.text-input:focus {
-    border-bottom-color: #0d47a1;
+    &:focus {
+        border-bottom-color: #0d47a1;
+    }
 }

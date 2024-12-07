@@ -1,1 +1,1 @@
-export { CreateAccount } from './model/CreateAccount';
+export * from './model/CreateAccountPage';

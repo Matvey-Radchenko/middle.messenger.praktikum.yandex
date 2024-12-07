@@ -1,6 +1,11 @@
-import { InputProps } from '@shared/index';
+import { TextInputProps } from '@shared/index';
+import { CreateAccountFormData } from './types/CreateAccountFormData';
 
-export const CREATE_ACCOUNT_FIELDS: Array<InputProps> = [
+type CreateAccountFormDataKeys = keyof CreateAccountFormData;
+
+export const CREATE_ACCOUNT_FIELDS: Array<
+    TextInputProps & { name: CreateAccountFormDataKeys }
+> = [
     {
         name: 'email',
         type: 'email',

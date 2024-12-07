@@ -1,0 +1,17 @@
+<div>
+	<nav>
+		{{> TextInput }} 
+		{{> Link link }}
+	</nav>
+
+	<div class="chat">
+		<div class="chat__messages">
+			{{#each messages}}
+				{{> Message message}}
+			{{/each}}
+		</div>
+		<div class="chat__input">
+			{{> TextInput input}}
+		</div>
+	</div>
+</div>

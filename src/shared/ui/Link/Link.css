@@ -1,0 +1,18 @@
+.link {
+    text-decoration: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 8px 16px;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    &:disabled {
+        color: var(--text-color-disabled);
+    }
+
+    &:visited {
+        color: var(--primary-color);
+    }
+}
