@@ -40,6 +40,10 @@
             gap: 5px;
             align-self: stretch;
             margin-top: auto;
+
+            .link {
+                padding: 8px 16px;
+            }
         }
     }
 }

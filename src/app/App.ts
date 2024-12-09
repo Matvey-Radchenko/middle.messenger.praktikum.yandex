@@ -1,7 +1,8 @@
+import { ChatPage } from '@pages/Chat/model/ChatPage';
 import './styles/main.css';
 import { UserData } from '@entities/index';
-import { LogInPage } from '@pages/LogIn';
-import { CreateAccountPage, NotFoundPage } from '@pages/index';
+import { CreateAccountPage, NotFoundPage, LogInPage } from '@pages/index';
+import { Page } from '@shared/index';
 
 export class App {
     rootElement: HTMLElement;
@@ -34,10 +35,13 @@ export class App {
     }
 
     render() {
-        let page = {
-            '/create-account': CreateAccountPage,
-            '/login': LogInPage,
-        }[this.route];
+        let page = (
+            {
+                '/create-account': () => new CreateAccountPage(),
+                '/login': () => new LogInPage(),
+                '/chat': () => new ChatPage(),
+            } as Record<string, () => Page>
+        )[this.route]?.();
 
         if (page) {
             this.rootElement.innerHTML = page.render();

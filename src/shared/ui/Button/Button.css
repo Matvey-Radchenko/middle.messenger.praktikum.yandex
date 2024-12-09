@@ -33,4 +33,9 @@
             background-color: var(--secondary-color-active);
         }
     }
+
+    &.rounded {
+        border-radius: 50px;
+        box-sizing: border-box;
+    }
 }

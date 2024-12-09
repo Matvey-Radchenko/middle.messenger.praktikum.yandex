@@ -21,4 +21,7 @@ export default defineConfig({
         postcss: './postcss.config.js',
     },
     root: './src',
+    server: {
+        port: 3000,
+    },
 });

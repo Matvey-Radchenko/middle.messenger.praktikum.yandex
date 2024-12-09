@@ -1,8 +1,9 @@
 import { CreateAccountFormData } from './types/CreateAccountFormData';
 import { ModalFormTemplate } from '@features/index';
 import { CREATE_ACCOUNT_FIELDS } from '@pages/CreateAccount/model/fields';
+import { Page } from '@shared/index';
 
-class CreateAccount {
+export class CreateAccountPage implements Page {
     formId = 'create-account-form';
     formState: CreateAccountFormData = {
         email: '',
@@ -39,5 +40,3 @@ class CreateAccount {
         });
     }
 }
-
-export const CreateAccountPage = new CreateAccount();

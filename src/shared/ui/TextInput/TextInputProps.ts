@@ -3,4 +3,5 @@ export type TextInputProps = Partial<{
     name: string;
     type: 'text' | 'email' | 'password' | 'tel';
     placeholder: string;
+    view?: 'filled';
 }>;

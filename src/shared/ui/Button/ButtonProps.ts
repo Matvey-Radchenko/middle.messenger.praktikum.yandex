@@ -3,5 +3,6 @@ export type ButtonProps = {
     text: string;
     type: 'button' | 'submit' | 'reset';
     class: 'primary' | 'secondary';
+    rounded?: boolean;
     disabled?: boolean;
 };

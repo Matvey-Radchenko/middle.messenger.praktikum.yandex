@@ -1,8 +1,9 @@
 import { LoginFormData } from './types/LogInFormData';
 import { ModalFormTemplate } from '@features/index';
 import { LOGIN_ACCOUNT_FIELDS } from './fields';
+import { Page } from '@shared/index';
 
-class LogIn {
+export class LogInPage implements Page {
     formId = 'login-form';
     formState: LoginFormData = {
         login: '',
@@ -37,5 +38,3 @@ class LogIn {
         });
     }
 }
-
-export const LogInPage = new LogIn();

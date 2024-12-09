@@ -1,0 +1,71 @@
+.chat-page {
+    display: flex;
+    height: 100vh; /* Убедитесь, что страница занимает всю высоту экрана */
+    width: 100%;
+
+    .left-panel {
+        display: flex;
+        flex-direction: column;
+        max-width: 25%;
+        min-width: 300px;
+        flex-grow: 1;
+
+        &__header {
+            padding: 20px 10px 14px;
+
+            .link {
+                width: fit-content;
+                display: block;
+                margin-left: auto;
+            }
+
+            .text-input {
+                margin-top: 20px;
+            }
+        }
+
+        .chat-list {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+    }
+
+    .chat-block {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Используем 100% высоты */
+
+        &__header {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--border-color);
+            height: 54px;
+            box-sizing: border-box;
+        }
+
+        &__content {
+            flex-grow: 1; /* Контейнер для сообщений заполняет всё доступное пространство */
+            overflow-y: auto; /* Включаем прокрутку по вертикали */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px 20px;
+        }
+
+        &__footer {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 20px;
+            border-top: 1px solid var(--border-color);
+
+            .button {
+                width: fit-content;
+            }
+        }
+    }
+}

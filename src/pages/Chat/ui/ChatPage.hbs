@@ -1,17 +1,33 @@
-<div>
-	<nav>
-		{{> TextInput }} 
-		{{> Link link }}
-	</nav>
-
-	<div class="chat">
-		<div class="chat__messages">
-			{{#each messages}}
-				{{> Message message}}
+<div class="chat-page">
+	<sidebar class="left-panel">
+		<div class="left-panel__header">
+			{{> Link href="/profile" text="Профиль >" type="secondary" }}
+			{{> TextInput placeholder="Поиск" name="search" type="text" view="filled"}} 
+		</div>
+		<div class="chat-list">
+			{{#each chats}}
+				{{> ChatPreview this}}
 			{{/each}}
 		</div>
-		<div class="chat__input">
-			{{> TextInput input}}
-		</div>
+	</sidebar>
+
+	<div class="chat-block">
+		<header class="chat-block__header">
+			{{> Avatar
+				src='https://avatars.mds.yandex.net/i?id=b864a156c74c5e6c318941efd10f17466ac56d29-6451675-images-thumbs&n=13'
+				initials='BS'
+				size="small"
+			}}
+			<h4>Big Smoke</h3>
+		</header>
+		<main class="chat-block__content">
+			{{#each messages}}
+				{{> Message this}}
+			{{/each}}
+		</main>
+		<footer class="chat-block__footer">
+			{{> TextInput placeholder="Сообщение" name="message" type="text" view="filled"}}
+			{{> Button text="→" class="primary" rounded="true"}}
+		</footer>
 	</div>
 </div>

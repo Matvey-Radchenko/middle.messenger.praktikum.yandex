@@ -1,9 +1,7 @@
 .text-input {
     display: block;
     width: 100%;
-    font-size: 13px;
-    font-family: 'Arial', sans-serif;
-    color: #000;
+    font-size: var(--font-size-sm);
     border: none;
     border-bottom: 1px solid var(--primary-color);
     outline: none;
@@ -11,11 +9,17 @@
     background: none;
 
     &::placeholder {
-        color: #999999;
-        font-weight: 400;
+        color: var(--text-color-secondary);
     }
 
     &:focus {
         border-bottom-color: #0d47a1;
+    }
+
+    &.filled {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        background-color: var(--secondary-color);
     }
 }
