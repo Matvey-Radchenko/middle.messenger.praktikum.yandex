@@ -1,4 +1,4 @@
-import { ChatPreviewProps, Message } from '@entities/index';
+import { ChatPreviewProps, Message } from '@entities';
 
 export type ChatPageProps = {
     chats: Array<ChatPreviewProps>;

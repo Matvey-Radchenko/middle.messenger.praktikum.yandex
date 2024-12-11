@@ -1,4 +1,8 @@
-export type UserData = Record<
-    'first_name' | 'second_name' | 'login' | 'email' | 'password' | 'phone',
-    string
->;
+export type User = {
+    first_name: string;
+    second_name: string;
+    display_name: string;
+    login: string;
+    email: string;
+    phone: string;
+};

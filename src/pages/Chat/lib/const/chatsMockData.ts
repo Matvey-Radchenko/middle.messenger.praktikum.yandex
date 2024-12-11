@@ -1,4 +1,4 @@
-import { ChatPreviewProps } from '@entities/index';
+import { ChatPreviewProps } from '@entities';
 
 export const CHATS_MOCK_DATA: Array<ChatPreviewProps> = [
     {

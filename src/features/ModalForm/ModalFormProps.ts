@@ -1,4 +1,4 @@
-import { ButtonProps, TextInputProps, LinkProps } from '@shared/index';
+import { ButtonProps, TextInputProps, LinkProps } from '@shared';
 
 export type ModalFormProps = {
     formId: string;

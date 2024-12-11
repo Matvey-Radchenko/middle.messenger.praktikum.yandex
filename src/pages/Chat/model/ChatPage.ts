@@ -1,6 +1,6 @@
 import { CHATS_MOCK_DATA } from '../lib/const/chatsMockData';
 import { ChatPageTemplate } from '@pages/Chat/ui';
-import { Page } from '@shared/index';
+import { Page } from '@shared';
 
 export class ChatPage implements Page {
     attachListeners(): void {

@@ -1,4 +1,5 @@
-export { type UserData } from './User/model/User';
+export { type User, type LogInData, logIn, createUser } from './User';
+
 export { type Message } from './Message/model/Message';
 export { type ChatPreviewProps } from './Chat/model/ChatPreviewProps';
 

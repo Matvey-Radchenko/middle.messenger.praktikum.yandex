@@ -1,4 +1,7 @@
+export { delay } from './lib';
+
 export { Link, TextInput, Button, Avatar } from './ui';
+
 export {
     type LinkProps,
     type TextInputProps,
@@ -6,4 +9,4 @@ export {
     type AvatarProps,
 } from './ui';
 
-export { type Page } from './types/page';
+export { type Page } from './types/PageType';

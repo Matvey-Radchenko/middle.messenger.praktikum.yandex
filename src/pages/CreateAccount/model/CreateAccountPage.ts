@@ -1,28 +1,28 @@
-import { CreateAccountFormData } from './types/CreateAccountFormData';
-import { ModalFormTemplate } from '@features/index';
-import { CREATE_ACCOUNT_FIELDS } from '@pages/CreateAccount/model/fields';
-import { Page } from '@shared/index';
+import { ModalFormTemplate } from '@features';
+import { CREATE_ACCOUNT_FIELDS } from './fields';
+import { CreateAccountPageProps } from './types/CreateAccountPageProps';
+import { Page } from '@shared';
+import { createUser, User } from '@entities';
 
 export class CreateAccountPage implements Page {
     formId = 'create-account-form';
-    formState: CreateAccountFormData = {
-        email: '',
-        login: '',
-        first_name: '',
-        second_name: '',
-        password: '',
-        phone: '',
-        passwordRepeat: '',
-    };
+
+    onCreateAccount?: CreateAccountPageProps['onCreateAccount'];
+
+    constructor({ onCreateAccount }: CreateAccountPageProps) {
+        this.onCreateAccount = onCreateAccount;
+    }
 
     attachListeners() {
         const form = document.getElementById(this.formId);
         form?.addEventListener('submit', (event) => this.onSubmit(event));
     }
 
-    onSubmit(event: SubmitEvent) {
+    async onSubmit(event: SubmitEvent) {
         event.preventDefault();
-        console.log(this.formState);
+        const data = Object.fromEntries(new FormData(event.target as HTMLFormElement));
+        const user = await createUser(data as User);
+        this.onCreateAccount?.(user);
     }
 
     render() {

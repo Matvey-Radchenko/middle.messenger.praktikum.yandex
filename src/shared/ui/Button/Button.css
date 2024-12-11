@@ -34,8 +34,40 @@
         }
     }
 
-    &.rounded {
-        border-radius: 50px;
-        box-sizing: border-box;
+    &.danger {
+        background-color: var(--danger-color);
+        color: var(--text-color-inverted);
+
+        &:hover {
+            background-color: var(--danger-color-hover);
+        }
+
+        &:active {
+            background-color: var(--danger-color-active);
+        }
+    }
+
+    &__size {
+        &--sm {
+            font-size: 12px;
+            padding: 4px 8px;
+        }
+
+        &--md {
+            font-size: 16px;
+            padding: 8px 16px;
+        }
+
+        &--lg {
+            font-size: 20px;
+            padding: 12px 24px;
+        }
+    }
+
+    &.round {
+        width: 40px;
+        aspect-ratio: 1/1;
+        padding: 0;
+        border-radius: 100%;
     }
 }

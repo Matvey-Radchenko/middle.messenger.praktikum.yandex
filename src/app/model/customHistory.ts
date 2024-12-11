@@ -1,7 +1,7 @@
 const originalPushState = history.pushState;
 const originalReplaceState = history.replaceState;
 
-function handleHistoryChange(method: any, ...args: any) {
+function handleHistoryChange() {
     setTimeout(() => {
         const event = new Event('historychange');
         window.dispatchEvent(event);
@@ -9,11 +9,11 @@ function handleHistoryChange(method: any, ...args: any) {
 }
 
 history.pushState = function (...args) {
-    handleHistoryChange('pushState', ...args);
+    handleHistoryChange();
     return originalPushState.apply(this, args);
 };
 
 history.replaceState = function (...args) {
-    handleHistoryChange('replaceState', ...args);
+    handleHistoryChange();
     return originalReplaceState.apply(this, args);
 };

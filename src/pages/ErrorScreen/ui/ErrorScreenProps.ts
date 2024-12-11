@@ -1,4 +1,4 @@
-import { LinkProps } from '@shared/index';
+import { LinkProps } from '@shared';
 
 export type ErrorScreenProps = {
     code: number;

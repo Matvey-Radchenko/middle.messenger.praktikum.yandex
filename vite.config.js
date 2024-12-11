@@ -20,7 +20,10 @@ export default defineConfig({
     css: {
         postcss: './postcss.config.js',
     },
-    root: './src',
+    root: './src/app',
+    build: {
+        outDir: '../../dist',
+    },
     server: {
         port: 3000,
     },

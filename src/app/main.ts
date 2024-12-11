@@ -1,6 +1,4 @@
-import './partials';
-import { App } from './app/App';
-import './app/router';
+import { App } from './model/App';
 
 document.addEventListener('DOMContentLoaded', () => {
     const app = new App();

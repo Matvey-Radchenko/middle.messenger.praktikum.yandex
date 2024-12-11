@@ -7,6 +7,10 @@
     --secondary-color-hover: #e5e5e5;
     --secondary-color-active: #d3d3d3;
 
+    --danger-color: #f44336;
+    --danger-color-hover: #d32f2f;
+    --danger-color-active: #b71c1c;
+
     --hover-color: #3369f30f;
     --active-color: #3369f31e;
 

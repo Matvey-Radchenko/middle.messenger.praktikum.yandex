@@ -1,4 +1,4 @@
-import { TextInputProps } from '@shared/index';
+import { TextInputProps } from '@shared';
 import { CreateAccountFormData } from './types/CreateAccountFormData';
 
 type CreateAccountFormDataKeys = keyof CreateAccountFormData;

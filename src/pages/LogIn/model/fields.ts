@@ -1,11 +1,7 @@
-import { TextInputProps } from '@shared/index';
-import { LoginFormData } from './types/LogInFormData';
+import { LogInData } from '@entities';
+import { TextInputProps } from '@shared';
 
-type LoginAccountFormDataKeys = keyof LoginFormData;
-
-export const LOGIN_ACCOUNT_FIELDS: Array<
-    TextInputProps & { name: LoginAccountFormDataKeys }
-> = [
+export const LOGIN_ACCOUNT_FIELDS: Array<TextInputProps & { name: keyof LogInData }> = [
     {
         name: 'login',
         type: 'text',

@@ -9,10 +9,15 @@
         "baseUrl": "./",
         "paths": {
             "@pages/*": ["src/pages/*"],
+            "@pages": ["src/pages/index"],
             "@widgets/*": ["src/widgets/*"],
+            "@widgets": ["src/widgets/index"],
             "@features/*": ["src/features/*"],
+            "@features": ["src/features/index"],
             "@entities/*": ["src/entities/*"],
-            "@shared/*": ["src/shared/*"]
+            "@entities": ["src/entities/index"],
+            "@shared/*": ["src/shared/*"],
+            "@shared": ["src/shared/index"]
         }
     },
     "include": ["src", "vite-env.d.ts"],

@@ -5,7 +5,7 @@
     "description": "### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main.  ### ВАЖНО: pull request должен называться “Sprint i” (i — номер спринта).",
     "main": "index.js",
     "scripts": {
-        "dev": "vite",
+        "dev": "vite --open",
         "build": "vite build",
         "serve": "vite preview",
         "test": "echo \"Error: no test specified\" && exit 1",
