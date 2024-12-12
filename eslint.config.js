@@ -17,5 +17,6 @@ module.exports = {
     rules: {
         'max-len': ['error', { code: 90, ignoreUrls: true }],
         'prettier/prettier': 'error',
+        'eol-last': ['error', 'always'],
     },
 };

@@ -11,6 +11,7 @@
         "build": "vite build",
         "start": "vite build && node server.cjs",
         "lint": "eslint . --ext .ts,.js",
+        "lint:fix": "eslint . --ext .ts,.js --fix",
         "format": "prettier --write .",
         "typecheck": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false"
     },

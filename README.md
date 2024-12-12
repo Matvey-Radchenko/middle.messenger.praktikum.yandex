@@ -34,7 +34,7 @@ npm install
 Для локального запуска:
 
 ```bash
-npm run dev
+npm run start
 ```
 
 Проект будет запущен по адресу http://localhost:3000.
