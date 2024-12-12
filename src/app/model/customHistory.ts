@@ -17,3 +17,7 @@ history.replaceState = function (...args) {
     handleHistoryChange();
     return originalReplaceState.apply(this, args);
 };
+
+if (typeof globalThis.structuredClone !== 'function') {
+    globalThis.structuredClone = (obj: any) => JSON.parse(JSON.stringify(obj));
+}
