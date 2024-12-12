@@ -6,6 +6,7 @@ import {
     LogInPage,
     ProfilePage,
     ChatPage,
+    InternalServerErrorPage,
 } from '@pages';
 import { User } from '@entities/User/model/User';
 import { Page } from '@shared/types/PageType';
@@ -22,7 +23,13 @@ export class App {
         this.rootElement = document.getElementById('app')!;
         this.attachListeners();
 
-        if (!this.user && this.route !== '/login') {
+        if (!this.user && ['/chat', '/profile'].includes(this.route)) {
+            history.pushState(null, '', '/login');
+            alert('Cначала необходимо войти в аккаунт');
+            return;
+        }
+
+        if (this.route === '/') {
             history.pushState(null, '', '/login');
         }
     }
@@ -69,14 +76,16 @@ export class App {
                         this.setUser.bind(this),
                         this.logOut.bind(this)
                     ),
+                '/500': () => new InternalServerErrorPage(),
+                '/404': () => new NotFoundPage(),
             } as Record<string, () => Page>
         )[this.route]?.();
 
         if (page) {
             this.rootElement.innerHTML = page.render();
-            page.attachListeners();
+            page.attachListeners?.();
         } else {
-            this.rootElement.innerHTML = NotFoundPage();
+            this.rootElement.innerHTML = new NotFoundPage().render();
         }
     }
 }
