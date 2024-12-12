@@ -1,6 +1,6 @@
 .chat-page {
     display: flex;
-    height: 100vh; /* Убедитесь, что страница занимает всю высоту экрана */
+    height: 100vh;
     width: 100%;
 
     .left-panel {
@@ -9,6 +9,7 @@
         max-width: 25%;
         min-width: 300px;
         flex-grow: 1;
+        border-right: 1px solid var(--border-color);
 
         &__header {
             padding: 20px 10px 14px;
@@ -35,7 +36,7 @@
         flex-grow: 1;
         display: flex;
         flex-direction: column;
-        height: 100%; /* Используем 100% высоты */
+        height: 100%;
 
         &__header {
             display: flex;
@@ -48,8 +49,8 @@
         }
 
         &__content {
-            flex-grow: 1; /* Контейнер для сообщений заполняет всё доступное пространство */
-            overflow-y: auto; /* Включаем прокрутку по вертикали */
+            flex-grow: 1;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 10px;

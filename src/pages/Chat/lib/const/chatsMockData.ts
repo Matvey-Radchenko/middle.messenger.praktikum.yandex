@@ -2,24 +2,24 @@ import { ChatPreviewProps } from '@entities';
 
 export const CHATS_MOCK_DATA: Array<ChatPreviewProps> = [
     {
-        name: 'ФСБ',
-        imageSrc: 'https://via.placeholder.com/150',
+        name: 'Кот',
+        imageSrc:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Felis_silvestris_silvestris.jpg/275px-Felis_silvestris_silvestris.jpg',
         lastMessage: {
-            text: 'спишь?))',
+            text: 'спишь?)) 👉👈',
             time: '00:02',
-            sender: 'user',
+            outgoing: false,
         },
-        isOwnMessage: true,
+        unreadMessages: 1,
     },
     {
         name: 'Костя Архипов',
         imageSrc: 'https://via.placeholder.com/150',
         lastMessage: {
-            text: 'У тебя инт работает?',
+            text: 'У тебя дев работает?',
             time: '12:00',
-            sender: 'user',
+            outgoing: false,
         },
-        isOwnMessage: false,
         unreadMessages: 2,
     },
     {
@@ -27,11 +27,10 @@ export const CHATS_MOCK_DATA: Array<ChatPreviewProps> = [
         imageSrc:
             'https://cdn33.printdirect.ru/cache/product/4b/2f/8379032/tov/all/480z480_front_2259_0_0_0_81d8b4ad492b973eb46829535eb4.jpg',
         lastMessage: {
-            text: 'Давай давай',
+            text: '...',
             time: '14:20',
-            sender: 'user',
+            outgoing: false,
         },
-        isOwnMessage: false,
         unreadMessages: 1,
     },
 ];
