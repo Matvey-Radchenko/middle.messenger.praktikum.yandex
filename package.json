@@ -2,7 +2,6 @@
     "name": "middle.messenger.praktikum.yandex",
     "version": "1.0.0",
     "type": "module",
-    "description": "### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main.  ### ВАЖНО: pull request должен называться “Sprint i” (i — номер спринта).",
     "main": "index.js",
     "scripts": {
         "dev": "vite --open",
@@ -16,10 +15,10 @@
     "dependencies": {
         "handlebars": "^4.7.8",
         "postcss": "^8.4.49",
-        "vite": "^6.0.1",
         "express": "^4.19.2"
     },
     "devDependencies": {
+        "vite": "^6.0.1",
         "@typescript-eslint/eslint-plugin": "^8.16.0",
         "@typescript-eslint/parser": "^8.16.0",
         "autoprefixer": "^10.4.20",
