@@ -34,7 +34,7 @@ npm install
 Для локального запуска:
 
 ```bash
-npm run dev
+npm run start
 ```
 
 Проект будет запущен по адресу http://localhost:3000.
@@ -70,10 +70,13 @@ src/
 
 ## Навигация
 
-    •	Авторизации и регистрации
-    •	Список чатов с предварительным просмотром последних сообщений
-    •	Просмотр переписки в открытом чате
-    •	Профиль пользователя
+Netlify: https://dashing-kashata-cb33c9.netlify.app  
+• [Авторизация](https://dashing-kashata-cb33c9.netlify.app/login)  
+• [Регистрация](https://dashing-kashata-cb33c9.netlify.app/create-account)  
+• [Список чатов и просмотр переписки](https://dashing-kashata-cb33c9.netlify.app/chat)  
+• [Профиль пользователя](https://dashing-kashata-cb33c9.netlify.app/profile)  
+• [404](https://dashing-kashata-cb33c9.netlify.app/404)  
+• [500](https://dashing-kashata-cb33c9.netlify.app/500)
 
 ## TODO
 

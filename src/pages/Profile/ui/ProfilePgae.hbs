@@ -2,36 +2,42 @@
 	<div class="profile-page__return-link">
 		{{> Link href="/chat" text="< Назад" type="primary" }}
 	</div>
-	<section class="profile-page__content">
+	<main class="profile-page__content">
 		{{> Avatar
 			src='https://sun1-47.userapi.com/s/v1/ig2/J4tV5J9d2XW2_HeaoE_tHhBMNbrTvy7h5zjPbgYw-7opMxvybxS49Ig7cOUnr0gVEA9uGUJDZGlvfrRrwDpQGb8o.jpg?quality=95&as=32x31,48x46,72x69,108x104,160x154,240x231,360x346,480x462,540x519,640x616,720x693,735x707&from=bu&u=p8W56VA_LlspHhMGsdv9mUjamvyE-yDxtoGME6PDIZA&cs=604x581'
 			initials='BS'
 			size="xlarge"
 		}}
 		<h4>{{display_name}}</h4>
-		{{#if editUser}}
-			{{> TextInput placeholder="Имя" name="first_name" type="text" value=first_name}}
-			{{> TextInput placeholder="Фамилия" name="second_name" type="text" value=second_name}}
-			{{> TextInput placeholder="Имя в чате" name="display_name" type="text" value=display_name}}
-			{{> TextInput placeholder="Телефон" name="phone" type="tel" value=phone}}
-			{{> TextInput placeholder="Почта" name="email" type="email" value=email}}
-			{{> TextInput placeholder="Логин" name="login" type="text" value=login}}
-			{{> Button id="save-user" text="Сохранить" class="primary" size="md"}}
-		{{else if editPassword}}
-			{{> TextInput placeholder="Пароль" name="password" type="password" }}
-			{{> TextInput placeholder="Новый пароль" name="new_password" type="password" }}
-			{{> TextInput placeholder="Повторите новый пароль" name="new_password_repeat" type="password" }}
-			{{> Button id="save-password" text="Сохранить" class="primary" size="md"}}
-		{{else}}
-			{{> AttributeRow name="Почта" value=email}}
-			{{> AttributeRow name="Логин" value=login}}
-			{{> AttributeRow name="Имя" value=first_name}}
-			{{> AttributeRow name="Фамилия" value=second_name}}
-			{{> AttributeRow name="Имя в чате" value=display_name}}
-			{{> AttributeRow name="Телефон" value=phone}}
-			{{> Button id="edit-user" text="Изменить данные" class="primary" size="sm"}}
-			{{> Button id="edit-password" text="Изменить пароль" class="primary" size="sm"}}
-			{{> Button id="logout" text="Выйти" class="danger" size="sm"}}
-		{{/if}}
-	</section>
+			{{#if editUser}}
+				<form id="edit-user-form">
+					{{> TextInput placeholder="Имя" name="first_name" type="text" value=first_name}}
+					{{> TextInput placeholder="Фамилия" name="second_name" type="text" value=second_name}}
+					{{> TextInput placeholder="Имя в чате" name="display_name" type="text" value=display_name}}
+					{{> TextInput placeholder="Телефон" name="phone" type="tel" value=phone}}
+					{{> TextInput placeholder="Почта" name="email" type="email" value=email}}
+					{{> TextInput placeholder="Логин" name="login" type="text" value=login}}
+					{{> Button id="save-user" type="submit" text="Сохранить" class="primary" size="md"}}
+				</form>
+			{{else if editPassword}}
+				<form id="edit-password-form">
+					{{> TextInput placeholder="Пароль" name="password" type="password" }}
+					{{> TextInput placeholder="Новый пароль" name="new_password" type="password" }}
+					{{> TextInput placeholder="Повторите новый пароль" name="new_password_repeat" type="password" }}
+					{{> Button id="save-password" type="submit" text="Сохранить" class="primary" size="md"}}
+				</form>
+			{{else}}
+				<section>
+					{{> AttributeRow name="Почта" value=email}}
+					{{> AttributeRow name="Логин" value=login}}
+					{{> AttributeRow name="Имя" value=first_name}}
+					{{> AttributeRow name="Фамилия" value=second_name}}
+					{{> AttributeRow name="Имя в чате" value=display_name}}
+					{{> AttributeRow name="Телефон" value=phone}}
+					{{> Button id="edit-user" text="Изменить данные" class="primary" size="sm"}}
+					{{> Button id="edit-password" text="Изменить пароль" class="primary" size="sm"}}
+					{{> Button id="logout" text="Выйти" class="danger" size="sm"}}
+				</section>
+			{{/if}}
+	</main>
 </div>

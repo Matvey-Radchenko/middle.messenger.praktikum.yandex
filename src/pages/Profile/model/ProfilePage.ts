@@ -34,11 +34,13 @@ export class ProfilePage implements Page {
             this.logOut?.();
         });
 
-        document.getElementById('save-user')?.addEventListener('click', () => {
+        document.getElementById('edit-user-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
             this.setUser?.(this.user!);
         });
 
-        document.getElementById('save-password')?.addEventListener('click', () => {
+        document.getElementById('edit-password-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
             this.setUser?.(this.user!);
         });
     }
