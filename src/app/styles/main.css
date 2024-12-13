@@ -1,0 +1,50 @@
+:root {
+    --primary-color: #3369f3;
+    --primary-color-hover: #1153b5;
+    --primary-color-active: #0c4395;
+
+    --secondary-color: #f3f3f3;
+    --secondary-color-hover: #e5e5e5;
+    --secondary-color-active: #d3d3d3;
+
+    --danger-color: #f44336;
+    --danger-color-hover: #d32f2f;
+    --danger-color-active: #b71c1c;
+
+    --hover-color: #3369f30f;
+    --active-color: #3369f31e;
+
+    --border-color: #eaeaea;
+    --background-color: #fff;
+
+    /* Текст */
+    --text-color: #1e1e1e;
+    --text-color-inverted: #fff;
+    --text-color-secondary: #999;
+
+    --font-weight-regular: 400;
+    --font-weight-bold: 700;
+
+    --font-size-base: 16px;
+    --font-size-xs: 12px;
+    --font-size-sm: 14px;
+    --font-size-lg: 18px;
+    --font-size-xl: 24px;
+
+    --line-height-base: 1.5;
+    --line-height-sm: 1.4;
+    --line-height-lg: 1.6;
+
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.05em;
+}
+
+html {
+    overflow: hidden;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: var(--text-color);
+    margin: 0;
+}

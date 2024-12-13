@@ -1,0 +1,26 @@
+.link {
+    text-decoration: none;
+    color: var(--primary-color);
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    &:disabled {
+        color: var(--text-color-secondary);
+    }
+
+    &:visited {
+        color: var(--primary-color);
+    }
+
+    &.secondary {
+        color: var(--text-color-secondary);
+        font-size: var(--font-size-xs);
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
