@@ -1,1 +1,1 @@
-export * from './await';
+export * from './utils/await';
