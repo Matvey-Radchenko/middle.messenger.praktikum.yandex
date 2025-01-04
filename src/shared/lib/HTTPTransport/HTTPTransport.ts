@@ -27,9 +27,13 @@ export class HTTPTransport {
             xhr.ontimeout = () => reject(new Error('Request timed out'));
             xhr.timeout = timeout;
 
-            method === METHODS.GET || !data
-                ? xhr.send()
-                : xhr.send(typeof data === 'object' ? JSON.stringify(data) : data);
+            const isGet = method === METHODS.GET || !data;
+
+            if (isGet) {
+                xhr.send();
+            } else {
+                xhr.send(typeof data === 'object' ? JSON.stringify(data) : data);
+            }
         });
     }
 

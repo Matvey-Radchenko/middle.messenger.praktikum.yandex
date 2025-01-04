@@ -1,9 +1,12 @@
 .chat-preview {
+    cursor: pointer;
+
     display: flex;
     align-items: center;
+
     padding: 10px;
+
     border-top: 1px solid var(--border-color);
-    cursor: pointer;
 
     .avatar {
         margin-right: 10px;
@@ -11,7 +14,7 @@
 
     &__content {
         flex-grow: 1;
-        min-width: 0px;
+        min-width: 0;
     }
 
     &__header {
@@ -30,40 +33,42 @@
     }
 
     &__own {
-        color: var(--text-color);
         font-size: 13px;
+        color: var(--text-color);
     }
 
     &__message-body {
-        margin-top: 5px;
         display: flex;
-        align-items: center;
         gap: 2px;
+        align-items: center;
+        margin-top: 5px;
 
         .message-text {
-            white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis;
-            color: var(--text-color-secondary);
-            font-size: 12px;
             flex-grow: 1;
+
+            font-size: 12px;
+            color: var(--text-color-secondary);
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .unread-messages-badge {
-            flex-shrink: 0;
             display: flex;
+            flex-shrink: 0;
             align-items: center;
             justify-content: center;
-            box-sizing: border-box;
 
+            box-sizing: border-box;
             min-width: 20px;
             height: 20px;
             padding: 0 6px;
 
             font-size: 12px;
             font-weight: bold;
-            background-color: var(--primary-color);
             color: var(--text-color-inverted);
+
+            background-color: var(--primary-color);
             border-radius: 10px;
         }
     }

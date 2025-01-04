@@ -1,4 +1,4 @@
-import { LogInData, User, USER_REG_EXPS } from '@entities';
+import { User, USER_REG_EXPS } from '@entities';
 import { Block } from '@shared/lib';
 import { AttributeRow, Avatar, Button, Link, TextInput } from '@shared/ui';
 import { USER_PROP_NAMES } from '../../../entities/User/model/userPropNames';

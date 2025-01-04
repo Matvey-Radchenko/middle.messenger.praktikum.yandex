@@ -151,22 +151,10 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
                 return typeof value === 'function' ? value.bind(target) : value;
             },
             set(target: T, key: string | symbol, value: any): boolean {
-                // console.log('\n\nВ эту цель:', target);
-                /* console.log(
-                    '\n\nПо такому ключу:',
-                    key,
-                    '\n\nСтавится это значение:',
-                    value
-                ); */
-
                 if (typeof key === 'string') {
                     target[key as keyof T] = value;
                     self.eventBus.emit(Block.EVENTS.FLOW_CDU);
                 }
-
-                // console.log('\n\nЦель после этого:', target);
-
-                // console.log('\n\nДети после этого:', self._children);
 
                 return true;
             },

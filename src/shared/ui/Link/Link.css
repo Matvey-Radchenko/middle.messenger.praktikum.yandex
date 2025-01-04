@@ -1,7 +1,7 @@
 .link {
-    text-decoration: none;
-    color: var(--primary-color);
     cursor: pointer;
+    color: var(--primary-color);
+    text-decoration: none;
 
     &:hover {
         text-decoration: underline;
@@ -16,8 +16,8 @@
     }
 
     &.secondary {
-        color: var(--text-color-secondary);
         font-size: var(--font-size-xs);
+        color: var(--text-color-secondary);
 
         &:hover {
             text-decoration: none;
