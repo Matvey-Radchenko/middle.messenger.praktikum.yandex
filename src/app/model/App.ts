@@ -1,5 +1,4 @@
 import './customHistory';
-import './partials';
 import { CreateAccountPage, LogInPage, ChatPage, ErrorScreen, ProfilePage } from '@pages';
 import { User } from '@entities';
 import { Block } from '@shared/lib';

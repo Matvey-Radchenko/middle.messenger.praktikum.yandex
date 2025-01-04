@@ -1,7 +1,6 @@
 import { LOGIN_ACCOUNT_FIELDS } from './fields';
 import { LogInPageProps } from './types/LogInPageProps';
 import { logIn } from '@entities/User/api/getUser';
-import { LogInData } from '@entities/User';
 import { Block } from '@shared/lib';
 import { UserForm } from '@features/UserForm';
 import { Button, Modal, TextInput } from '@shared/ui';
@@ -12,7 +11,8 @@ export class LogInPage extends Block {
     async handleSubmit(event: SubmitEvent) {
         event.preventDefault();
         const data = Object.fromEntries(new FormData(event.target as HTMLFormElement));
-        const user = await logIn(data as LogInData);
+        console.log('LogInPage ~ handleSubmit ~ data:', data);
+        const user = await logIn();
 
         if (user) {
             this.onLogIn(user);

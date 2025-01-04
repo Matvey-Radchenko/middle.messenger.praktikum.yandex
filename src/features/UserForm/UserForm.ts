@@ -1,8 +1,7 @@
-import { createUser, User } from '@entities';
 import { Block } from '@shared/lib';
 import { UserFormProps } from './UserFormProps';
-import './UserForm.css';
 import { TextInput } from '@shared/ui';
+import './UserForm.css';
 
 export class UserForm extends Block {
     onSubmit: UserFormProps['onSubmit'];

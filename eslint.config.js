@@ -13,6 +13,7 @@ export default [
             'max-len': ['warn', { code: 90, ignoreUrls: true }],
             'eol-last': ['error', 'always'],
             '@typescript-eslint/no-explicit-any': 'warn',
+            '@typescript-eslint/no-unused-vars': 'warn',
         },
     },
 ];

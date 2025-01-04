@@ -80,6 +80,7 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
     protected componentDidMount() {}
 
     protected componentDidUpdate(oldProps: Props, newProps: Props): boolean {
+        console.log(oldProps, newProps);
         return true;
     }
 
@@ -142,18 +143,16 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
         this._addListeners();
     }
 
-    private _makeCDUProxy<T extends Record<string, any>>(props: T): T {
-        const self = this;
-
+    private _makeCDUProxy<T extends Record<string, unknown>>(props: T): T {
         return new Proxy(props, {
             get(target, prop: string) {
                 const value = target[prop];
                 return typeof value === 'function' ? value.bind(target) : value;
             },
-            set(target: T, key: string | symbol, value: any): boolean {
+            set: (target: T, key: string | symbol, value: any): boolean => {
                 if (typeof key === 'string') {
                     target[key as keyof T] = value;
-                    self.eventBus.emit(Block.EVENTS.FLOW_CDU);
+                    this.eventBus.emit(Block.EVENTS.FLOW_CDU);
                 }
 
                 return true;

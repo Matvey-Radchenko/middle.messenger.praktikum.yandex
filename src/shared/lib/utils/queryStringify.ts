@@ -1,4 +1,4 @@
-export function queryStringify(data: Record<string, any>): string {
+export function queryStringify(data: Record<string, unknown>): string {
     if (typeof data !== 'object') {
         throw new Error('Data must be object');
     }
@@ -6,7 +6,7 @@ export function queryStringify(data: Record<string, any>): string {
     let queryString = '';
 
     Object.entries(data).forEach(([key, value], index, array) => {
-        queryString += `${key}=${value.toString()}`;
+        queryString += `${key}=${value?.toString()}`;
 
         if (index !== array.length - 1) {
             queryString += '&';
