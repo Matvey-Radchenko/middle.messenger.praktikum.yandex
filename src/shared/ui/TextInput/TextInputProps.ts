@@ -1,8 +1,8 @@
-export type TextInputProps = Partial<{
-    id: string;
+export type TextInputProps = {
+    id?: string;
     name: string;
     type: 'text' | 'email' | 'password' | 'tel';
-    placeholder: string;
+    placeholder?: string;
     value?: string;
     view?: 'filled';
-}>;
+};

@@ -1,8 +1,9 @@
-import { Message } from '@entities';
+import { MessageProps } from '@entities';
+import { AvatarProps } from '@shared/ui';
 
 export type ChatPreviewProps = {
     name: string;
-    imageSrc: string;
-    lastMessage: Message;
+    avatar: Omit<AvatarProps, 'size'>;
+    lastMessage: MessageProps;
     unreadMessages?: number;
 };

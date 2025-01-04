@@ -1,15 +1,19 @@
 .button {
+    cursor: pointer;
+
     width: 100%;
     padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
+
     font-size: 16px;
-    cursor: pointer;
+
+    border: none;
+    border-radius: var(--border-radius-lg);
+
     transition: background-color 0.1s ease;
 
     &.primary {
-        background-color: var(--primary-color);
         color: var(--text-color-inverted);
+        background-color: var(--primary-color);
 
         &:hover {
             background-color: var(--primary-color-hover);
@@ -21,8 +25,8 @@
     }
 
     &.secondary {
-        background-color: var(--secondary-color);
         color: var(--primary-color);
+        background-color: var(--secondary-color);
         border: 1px solid var(--primary-color);
 
         &:hover {
@@ -35,8 +39,8 @@
     }
 
     &.danger {
-        background-color: var(--danger-color);
         color: var(--text-color-inverted);
+        background-color: var(--danger-color);
 
         &:hover {
             background-color: var(--danger-color-hover);
@@ -47,26 +51,38 @@
         }
     }
 
+    &.link {
+        display: inline-block;
+
+        box-sizing: border-box;
+
+        color: var(--primary-color);
+        text-align: center;
+        text-decoration: none;
+
+        background-color: transparent;
+    }
+
     &__size {
         &--sm {
-            font-size: 12px;
             padding: 4px 8px;
+            font-size: 12px;
         }
 
         &--md {
-            font-size: 16px;
             padding: 8px 16px;
+            font-size: 16px;
         }
 
         &--lg {
-            font-size: 20px;
             padding: 12px 24px;
+            font-size: 20px;
         }
     }
 
     &.round {
-        width: 40px;
         aspect-ratio: 1/1;
+        width: 40px;
         padding: 0;
         border-radius: 100%;
     }

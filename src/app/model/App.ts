@@ -1,15 +1,9 @@
 import './customHistory';
 import './partials';
-import {
-    CreateAccountPage,
-    NotFoundPage,
-    LogInPage,
-    ProfilePage,
-    ChatPage,
-    InternalServerErrorPage,
-} from '@pages';
-import { User } from '@entities/User/model/User';
-import { Page } from '@shared/types/PageType';
+import { CreateAccountPage, LogInPage, ChatPage, ErrorScreen, ProfilePage } from '@pages';
+import { User } from '@entities';
+import { Block } from '@shared/lib';
+import { Link } from '@shared/ui';
 
 export class App {
     rootElement: HTMLElement;
@@ -41,7 +35,7 @@ export class App {
 
     setUser(user: User) {
         this.user = user;
-        this.render();
+        // this.render();
     }
 
     handleAuth(data: User) {
@@ -54,6 +48,7 @@ export class App {
 
         document.addEventListener('click', (event) => {
             const link = (event.target as HTMLElement).closest('[data-link]');
+
             if (link) {
                 event.preventDefault();
                 history.pushState(null, '', link.getAttribute('href')!);
@@ -62,7 +57,7 @@ export class App {
     }
 
     render() {
-        let page = (
+        const page = (
             {
                 '/create-account': () =>
                     new CreateAccountPage({
@@ -76,16 +71,32 @@ export class App {
                         this.setUser.bind(this),
                         this.logOut.bind(this)
                     ),
-                '/500': () => new InternalServerErrorPage(),
-                '/404': () => new NotFoundPage(),
-            } as Record<string, () => Page>
+                '/500': () =>
+                    new ErrorScreen({
+                        code: 500,
+                        message: 'Куда я жмал?',
+                        link: new Link({ text: 'Назад к чатам', href: '/chat' }),
+                    }),
+                '/404': () =>
+                    new ErrorScreen({
+                        code: 404,
+                        message: 'Ты куда звóнишь, сынок?',
+                        link: new Link({ text: 'Назад к чатам', href: '/chat' }),
+                    }),
+            } as Record<string, () => Block>
         )[this.route]?.();
 
-        if (page) {
-            this.rootElement.innerHTML = page.render();
-            page.attachListeners?.();
-        } else {
-            this.rootElement.innerHTML = new NotFoundPage().render();
+        if (!page) {
+            history.replaceState(null, '', '/404');
+            return;
         }
+
+        if (this.rootElement.firstElementChild) {
+            this.rootElement.firstElementChild.replaceWith(page.element);
+        } else {
+            this.rootElement.appendChild(page.element);
+        }
+
+        page.dispatchComponentDidMount();
     }
 }

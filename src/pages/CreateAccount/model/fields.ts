@@ -1,5 +1,5 @@
 import { User } from '@entities';
-import { TextInputProps } from '@shared';
+import { TextInputProps } from '@shared/ui';
 
 export const CREATE_ACCOUNT_FIELDS: Array<TextInputProps & { name: keyof User }> = [
     {
