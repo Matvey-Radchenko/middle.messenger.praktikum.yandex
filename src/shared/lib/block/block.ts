@@ -14,11 +14,11 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
     // 2. Приватные свойства
     private eventBus: EventBus;
     private _element: HTMLElement | null = null;
-    private _children: Record<string, Array<Block>> = {};
     private _id: string | null = null;
 
     // 3. Защищённые свойства
     protected props: Props;
+    protected children: Record<string, Array<Block>> = {};
 
     // 4. Конструктор
     constructor(propsWithChildren: Props = {} as Props) {
@@ -26,7 +26,7 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
         const { props, children } = this._sortProps(propsWithChildren);
         this._id = uuid();
         this.props = this._makeCDUProxy({ ...props, _id: this._id });
-        this._children = this._makeCDUProxy({ ...children });
+        this.children = this._makeCDUProxy({ ...children });
         this.eventBus = eventBus;
 
         this._registerEvents(eventBus);
@@ -53,7 +53,7 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
         // console.log('Block<Props ~ setProps ~ newProps:', newProps)
 
         Object.assign(this.props, newProps);
-        Object.assign(this._children, newChildren);
+        Object.assign(this.children, newChildren);
     }
 
     public dispatchComponentDidMount() {
@@ -104,7 +104,7 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
     }
 
     private _compile() {
-        const childrenEntries = Object.entries(this._children);
+        const childrenEntries = Object.entries(this.children);
 
         const stubs = childrenEntries.reduce(
             (acc, [key, blocks]) => {
@@ -177,7 +177,7 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
     }
 
     private _sortProps(propsWithChildren: Props) {
-        const children: typeof this._children = {};
+        const children: typeof this.children = {};
         const props: typeof this.props = {} as Props;
 
         Object.entries(propsWithChildren).forEach(([key, value]) => {

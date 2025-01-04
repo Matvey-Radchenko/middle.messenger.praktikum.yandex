@@ -12,6 +12,7 @@ export class CreateAccountPage extends Block {
     async handleSubmit(event: SubmitEvent) {
         const data = Object.fromEntries(new FormData(event.target as HTMLFormElement));
         const user = await createUser(data as User);
+        console.log('CreateAccountPage ~ handleSubmit ~ data:', data);
 
         if (user) {
             this.onCreateAccount(user);

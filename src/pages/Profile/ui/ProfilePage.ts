@@ -1,7 +1,7 @@
-import { LogInData, User } from '@entities';
+import { LogInData, User, USER_REG_EXPS } from '@entities';
 import { Block } from '@shared/lib';
 import { AttributeRow, Avatar, Button, Link, TextInput } from '@shared/ui';
-import { USER_PROP_NAMES } from '../model/userPropNames';
+import { USER_PROP_NAMES } from '../../../entities/User/model/userPropNames';
 import './ProfilePage.css';
 
 export class ProfilePage extends Block {
@@ -17,20 +17,35 @@ export class ProfilePage extends Block {
         if (mode === 'user') {
             inputs = (
                 [
-                    { name: 'email', type: 'email' },
-                    { name: 'login', type: 'text' },
-                    { name: 'first_name', type: 'text' },
-                    { name: 'second_name', type: 'text' },
-                    { name: 'display_name', type: 'text' },
-                    { name: 'phone', type: 'tel' },
+                    {
+                        name: 'email',
+                        type: 'email',
+                        validation: USER_REG_EXPS.email,
+                    },
+                    { name: 'login', type: 'text', validation: USER_REG_EXPS.login },
+                    {
+                        name: 'first_name',
+                        type: 'text',
+                        validation: USER_REG_EXPS.first_name,
+                    },
+                    {
+                        name: 'second_name',
+                        type: 'text',
+                        validation: USER_REG_EXPS.second_name,
+                    },
+                    {
+                        name: 'display_name',
+                        type: 'text',
+                        validation: USER_REG_EXPS.display_name,
+                    },
+                    { name: 'phone', type: 'tel', validation: USER_REG_EXPS.phone },
                 ] as const
             ).map(
-                ({ name, type }) =>
+                (input) =>
                     new TextInput({
-                        name,
-                        type,
-                        value: this.user[name],
-                        placeholder: USER_PROP_NAMES[name],
+                        ...input,
+                        value: this.user[input.name],
+                        placeholder: USER_PROP_NAMES[input.name],
                     })
             );
         } else {
@@ -41,11 +56,13 @@ export class ProfilePage extends Block {
                         name: 'new_password',
                         type: 'password',
                         placeholder: 'Новый пароль',
+                        validation: USER_REG_EXPS.password,
                     },
                     {
                         name: 'new_password_repeat',
                         type: 'password',
                         placeholder: 'Повторите новый пароль',
+                        validation: USER_REG_EXPS.password,
                     },
                 ] as const
             ).map(
@@ -72,11 +89,14 @@ export class ProfilePage extends Block {
         e.preventDefault();
 
         const data = Object.fromEntries(new FormData(e.target as HTMLFormElement));
+        console.log(data);
 
-        if (this.editMode === 'password') {
-            console.log(data);
-        } else {
-            console.log(data);
+        const isValid = this.children.inputs.every((input) =>
+            (input as TextInput).validate()
+        );
+
+        if (!isValid) {
+            return;
         }
 
         // this.setUser?.(data as User);

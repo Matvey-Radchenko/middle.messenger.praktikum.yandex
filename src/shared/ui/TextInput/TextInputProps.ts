@@ -5,4 +5,8 @@ export type TextInputProps = {
     placeholder?: string;
     value?: string;
     view?: 'filled';
+    validation?: {
+        regExp: RegExp;
+        errorText: string;
+    };
 };
