@@ -17,3 +17,7 @@ history.replaceState = function (...args) {
     handleHistoryChange();
     return originalReplaceState.apply(this, args);
 };
+
+window.addEventListener('popstate', () => {
+    handleHistoryChange();
+});

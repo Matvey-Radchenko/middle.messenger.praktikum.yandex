@@ -1,22 +1,19 @@
-module.exports = {
-    env: {
-        browser: true,
-        es2021: true,
+import globals from 'globals';
+import pluginJs from '@eslint/js';
+import tseslint from 'typescript-eslint';
+
+/** @type {import('eslint').Linter.Config[]} */
+export default [
+    { files: ['**/*.{js,mjs,cjs,ts}'] },
+    { languageOptions: { globals: globals.browser } },
+    pluginJs.configs.recommended,
+    ...tseslint.configs.recommended,
+    {
+        rules: {
+            'max-len': ['warn', { code: 90, ignoreUrls: true }],
+            'eol-last': ['error', 'always'],
+            '@typescript-eslint/no-explicit-any': 'warn',
+            '@typescript-eslint/no-unused-vars': 'warn',
+        },
     },
-    extends: [
-        'eslint:recommended',
-        'plugin:@typescript-eslint/recommended',
-        'plugin:prettier/recommended',
-    ],
-    parser: '@typescript-eslint/parser',
-    parserOptions: {
-        ecmaVersion: 12,
-        sourceType: 'module',
-    },
-    plugins: ['@typescript-eslint'],
-    rules: {
-        'max-len': ['error', { code: 90, ignoreUrls: true }],
-        'prettier/prettier': 'error',
-        'eol-last': ['error', 'always'],
-    },
-};
+];

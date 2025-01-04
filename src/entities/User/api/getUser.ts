@@ -1,9 +1,8 @@
 import { MOCK_USER } from './mock/mockUser';
-import { User } from '../model/User';
-import { delay } from '@shared';
-import { LogInData } from '../model/LogInData';
+import { User } from '../model/types/User';
+import { delay } from '@shared/lib';
 
-export const logIn = async (data: LogInData): Promise<User> => {
+export const logIn = async (): Promise<User> => {
     await delay(300);
     return Promise.resolve(MOCK_USER);
 };

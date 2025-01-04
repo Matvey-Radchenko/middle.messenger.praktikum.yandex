@@ -10,8 +10,10 @@
         "dev": "vite --open",
         "build": "vite build",
         "start": "vite build && node server.cjs",
-        "lint": "eslint . --ext .ts,.js",
-        "lint:fix": "eslint . --ext .ts,.js --fix",
+        "lint": "eslint .",
+        "lint:fix": "eslint '**/*.ts' '**/*.js' --fix",
+        "lint:styles": "stylelint '**/*.css'",
+        "lint:styles:fix": "stylelint '**/*.css' --fix",
         "format": "prettier --write .",
         "typecheck": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false"
     },
@@ -20,20 +22,31 @@
     "dependencies": {
         "express": "^4.19.2",
         "handlebars": "^4.7.8",
-        "postcss": "^8.4.49"
+        "postcss": "^8.4.49",
+        "uuid": "^11.0.3"
     },
     "devDependencies": {
+        "@eslint/js": "^9.17.0",
         "@typescript-eslint/eslint-plugin": "^8.16.0",
         "@typescript-eslint/parser": "^8.16.0",
         "autoprefixer": "^10.4.20",
-        "eslint": "^9.16.0",
+        "eslint": "^9.17.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-prettier": "^5.2.1",
+        "globals": "^15.14.0",
         "postcss-cli": "^11.0.0",
         "postcss-nested": "^7.0.2",
         "postcss-preset-env": "^10.1.1",
         "prettier": "^3.4.1",
+        "stylelint": "^16.12.0",
+        "stylelint-config-clean-order": "^6.1.0",
+        "stylelint-config-recommended": "^14.0.1",
+        "stylelint-config-recommended-scss": "^14.1.0",
+        "stylelint-config-standard": "^36.0.1",
+        "stylelint-declaration-strict-value": "^1.10.6",
+        "stylelint-order": "^6.0.4",
         "typescript": "^5.7.2",
+        "typescript-eslint": "^8.19.0",
         "vite": "^4.5.5",
         "vite-plugin-handlebars": "^2.0.0"
     }

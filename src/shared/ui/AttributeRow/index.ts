@@ -1,3 +1,2 @@
-import './AttributeRow.css';
-export { default as AttributeRow } from './AttributeRow.hbs?raw';
+export { AttributeRow } from './AttributeRow';
 export { type AttributeRowProps } from './AttributeRowProps';

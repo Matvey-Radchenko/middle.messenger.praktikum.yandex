@@ -1,0 +1,21 @@
+.create-account-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-content: center;
+    align-items: center;
+
+    width: 100%;
+    margin: 0;
+
+    &__actions-block {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        gap: 2px;
+        align-items: center;
+        justify-content: end;
+
+        width: 100%;
+    }
+}

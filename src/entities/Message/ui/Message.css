@@ -1,29 +1,32 @@
 .message {
     display: flex;
     align-items: flex-start;
+
     max-width: 70%;
-    border-radius: 12px;
     padding: 12px;
+
     font-size: 14px;
     line-height: 1.4;
 
+    border-radius: 12px;
+
     &--incoming {
-        background-color: #f0f0f5;
-        color: #000;
         align-self: flex-start;
+        color: #000;
+        background-color: #f0f0f5;
     }
 
     &--outgoing {
-        background-color: #d4eaff;
-        color: #000;
         align-self: flex-end;
+        color: #000;
+        background-color: #d4eaff;
     }
 
     &__content {
+        position: relative;
         display: flex;
         flex-direction: column;
         gap: 8px;
-        position: relative;
     }
 
     &__text {
@@ -38,11 +41,14 @@
 
     &__time {
         position: relative;
-        font-size: 12px;
-        margin-left: 8px;
-        color: var(--text-color-secondary);
+
+        float: right;
+
         /* align-self: flex-end; */
         margin-top: 4px;
-        float: right;
+        margin-left: 8px;
+
+        font-size: 12px;
+        color: var(--text-color-secondary);
     }
 }

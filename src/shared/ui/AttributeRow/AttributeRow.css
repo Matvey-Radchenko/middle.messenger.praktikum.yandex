@@ -1,10 +1,12 @@
 .attribute-row {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 5px 0;
-    border-bottom: 1px solid var(--border-color);
+    justify-content: space-between;
+
     width: 100%;
+    padding: 5px 0;
+
+    border-bottom: 1px solid var(--border-color);
 
     &__name {
         /* font-weight: bold; */
