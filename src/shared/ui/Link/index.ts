@@ -1,3 +1,3 @@
 import './Link.css';
-export { default as Link } from './Link.hbs?raw';
+export { Link } from './Link';
 export { type LinkProps } from './LinkProps';

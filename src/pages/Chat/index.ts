@@ -1,2 +1,1 @@
-export * from './model/ChatPage';
-export * from './model/types/ChatPageProps';
+export { ChatPage } from './ui/ChatPage';

@@ -1,5 +1,10 @@
 {
     "compilerOptions": {
+        "strictNullChecks": true,
+        "sourceMap": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "noImplicitAny": true,
         "target": "ESNext",
         "module": "ESNext",
         "moduleResolution": "Node",

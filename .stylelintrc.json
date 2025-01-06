@@ -1,0 +1,35 @@
+{
+    "extends": [
+        "stylelint-config-standard",
+        "stylelint-config-recommended",
+        "stylelint-config-clean-order"
+    ],
+    "plugins": ["stylelint-order"],
+    "rules": {
+        "at-rule-no-unknown": [
+            true,
+            {
+                "ignoreAtRules": [
+                    "tailwind",
+                    "apply",
+                    "layer",
+                    "responsive",
+                    "screen",
+                    "extends",
+                    "mixin",
+                    "include"
+                ]
+            }
+        ],
+        "declaration-no-important": true,
+        "selector-class-pattern": "^[a-z][a-zA-Z0-9-_]+$",
+        "max-nesting-depth": 3,
+        "no-empty-source": null,
+        "value-keyword-case": "lower",
+        "function-url-no-scheme-relative": true,
+        "declaration-property-value-disallowed-list": {
+            "color": ["red", "blue", "green"],
+            "/^animation/": ["/linear/"]
+        }
+    }
+}

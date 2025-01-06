@@ -1,5 +1,6 @@
-export * from './TextInput';
-export * from './Button';
-export * from './Link';
-export * from './Avatar';
-export * from './AttributeRow';
+export { TextInput, type TextInputProps } from './TextInput';
+export { Button, type ButtonProps } from './Button';
+export { Link, type LinkProps } from './Link';
+export { Modal } from './Modal/Modal';
+export { Avatar, type AvatarProps } from './Avatar';
+export { AttributeRow, type AttributeRowProps } from './AttributeRow';

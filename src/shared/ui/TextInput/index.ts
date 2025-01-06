@@ -1,3 +1,3 @@
 import './TextInput.css';
-export { default as TextInput } from './TextInput.hbs?raw';
+export { TextInput } from './TextInput';
 export { type TextInputProps } from './TextInputProps';

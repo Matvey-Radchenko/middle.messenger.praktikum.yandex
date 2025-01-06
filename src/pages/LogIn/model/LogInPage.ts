@@ -1,48 +1,55 @@
-import { ModalFormTemplate } from '@features/index';
 import { LOGIN_ACCOUNT_FIELDS } from './fields';
-import { Page } from '@shared';
 import { LogInPageProps } from './types/LogInPageProps';
 import { logIn } from '@entities/User/api/getUser';
-import { LogInData } from '@entities/User';
+import { Block } from '@shared/lib';
+import { UserForm } from '@features/UserForm';
+import { Button, Modal, TextInput } from '@shared/ui';
 
-export class LogInPage implements Page {
-    formId = 'login-form';
-    onLogIn?: LogInPageProps['onLogIn'];
-
-    constructor({ onLogIn }: LogInPageProps) {
-        this.onLogIn = onLogIn;
-    }
+export class LogInPage extends Block {
+    onLogIn: LogInPageProps['onLogIn'];
 
     async handleSubmit(event: SubmitEvent) {
         event.preventDefault();
         const data = Object.fromEntries(new FormData(event.target as HTMLFormElement));
-        const user = await logIn(data as LogInData);
+        console.log('LogInPage ~ handleSubmit ~ data:', data);
+        const user = await logIn();
 
         if (user) {
-            this.onLogIn?.(user);
+            this.onLogIn(user);
         }
     }
 
-    attachListeners() {
-        const form = document.getElementById(this.formId);
-        form?.addEventListener('submit', (event) => this.handleSubmit(event));
+    constructor({ onLogIn }: LogInPageProps) {
+        super({
+            modal: new Modal({
+                children: new UserForm({
+                    title: 'Вход',
+                    fields: LOGIN_ACCOUNT_FIELDS.map((field) => new TextInput(field)),
+                    actions: [
+                        new Button({
+                            id: 'login-submit',
+                            type: 'submit',
+                            text: 'Авторизоваться',
+                            class: 'primary',
+                        }),
+                        new Button({
+                            text: 'Нет аккаунта?',
+                            link: '/create-account',
+                        }),
+                    ],
+                    onSubmit: (e) => this.handleSubmit(e),
+                }),
+            }),
+        });
+
+        this.onLogIn = onLogIn;
     }
 
     render() {
-        return ModalFormTemplate({
-            formId: this.formId,
-            title: 'Вход',
-            fields: LOGIN_ACCOUNT_FIELDS,
-            button: {
-                id: 'login-submit',
-                type: 'submit',
-                text: 'Авторизоваться',
-                class: 'primary',
-            },
-            link: {
-                text: 'Нет аккаунта?',
-                href: '/create-account',
-            },
-        });
+        return `
+            <div>
+                {{{modal}}}
+            </div>
+        `;
     }
 }

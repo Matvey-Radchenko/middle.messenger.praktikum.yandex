@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { defineConfig } from 'vite';
 import handlebars from 'vite-plugin-handlebars';
 import path from 'path';

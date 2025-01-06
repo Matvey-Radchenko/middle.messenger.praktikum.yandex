@@ -1,6 +1,6 @@
-import { Message } from '@entities';
+import { MessageProps } from '@entities';
 
-export const MESSAGES_MOCK_DATA: Array<Message> = [
+export const MESSAGES_MOCK_DATA: Array<MessageProps> = [
     {
         text: 'Я думаю о чуде, свидетелями которого мы были.',
         time: '14:00',
