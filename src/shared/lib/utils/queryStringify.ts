@@ -1,24 +1,31 @@
-export function queryStringify(data: Record<string, unknown>): string {
-    if (typeof data !== 'object' || data === null) {
-        throw new Error('Input must be a non-null object');
+import { isArrayOrObject } from './isArrayOrObject';
+import { isPlainObject } from './isPlainObject';
+import { PlainObject } from './types/PlainObject';
+
+function getKey(key: string, parentKey?: string) {
+    return parentKey ? `${parentKey}[${key}]` : key;
+}
+
+function getParams(data: PlainObject | [], parentKey?: string) {
+    const result: [string, string][] = [];
+
+    for (const [key, value] of Object.entries(data)) {
+        if (isArrayOrObject(value)) {
+            result.push(...getParams(value, getKey(key, parentKey)));
+        } else {
+            result.push([getKey(key, parentKey), encodeURIComponent(String(value))]);
+        }
     }
 
-    const encode = (value: unknown): string => {
-        if (value === null || value === undefined) {
-            return '';
-        }
-        if (Array.isArray(value)) {
-            return value.map((item) => encodeURIComponent(String(item))).join(',');
-        }
-        if (typeof value === 'object') {
-            return '[object Object]';
-        }
-        return encodeURIComponent(String(value));
-    };
+    return result;
+}
 
-    const entries = Object.entries(data)
-        .map(([key, value]) => `${encodeURIComponent(key)}=${encode(value)}`)
-        .filter((pair) => !pair.endsWith('='));
+export function queryStringify(data: PlainObject) {
+    if (!isPlainObject(data)) {
+        throw new Error('input must be an object');
+    }
 
-    return entries.length > 0 ? `?${entries.join('&')}` : '';
+    return getParams(data)
+        .map((arr) => arr.join('='))
+        .join('&');
 }

@@ -44,4 +44,10 @@ export default [
             '.env.*',
         ],
     },
+    {
+        files: ['*.ts', '*.tsx'],
+        rules: {
+            'no-undef': 'off',
+        },
+    },
 ];

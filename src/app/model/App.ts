@@ -1,12 +1,13 @@
 import './customHistory';
 import { CreateAccountPage, LogInPage, ChatPage, ErrorScreen, ProfilePage } from '@pages';
 import { User } from '@entities';
-import { Block } from '@shared/lib';
+import { Block, Router } from '@shared/lib';
 import { Link } from '@shared/ui';
 
 export class App {
     rootElement: HTMLElement;
     user?: User;
+    router = new Router('.app');
 
     get route() {
         return window.location.pathname;
@@ -34,7 +35,6 @@ export class App {
 
     setUser(user: User) {
         this.user = user;
-        // this.render();
     }
 
     handleAuth(data: User) {

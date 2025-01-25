@@ -1,1 +1,1 @@
-export type Listener<T = any> = (...args: T[]) => void;
+export type Listener<T = unknown> = (...args: T[]) => void;

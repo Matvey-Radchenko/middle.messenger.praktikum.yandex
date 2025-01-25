@@ -1,5 +1,7 @@
-export * from './api/getUser';
-export * from './api/createUser';
-export * from './model/types/LogInData';
-export * from './model/RegExp';
-export * from './model/types/User';
+export { logIn } from './api/getUser';
+export { createUser } from './api/createUser';
+
+export { LogInData } from './model/types/LogInData';
+export { User } from './model/types/User';
+export { USER_PROP_NAMES } from './model/userPropNames';
+export { USER_REG_EXPS } from './model/RegExp';
