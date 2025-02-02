@@ -1,15 +1,9 @@
 import { isEqual } from '@shared/lib';
-import { Block } from '@shared/lib/block';
-
-function render(query: string, block: Block) {
-    const root = document.querySelector(query);
-    root?.firstChild?.replaceWith(block.element);
-    return root;
-}
+import { Block, BlockConstructor } from '@shared/lib/block';
 
 type RouteProps = {
     pathname: string;
-    view: new (...args: unknown[]) => Block;
+    view: BlockConstructor;
     props: { rootQuery: string };
 };
 
@@ -33,12 +27,6 @@ export class Route {
         }
     }
 
-    leave() {
-        if (this._block) {
-            this._block.hide();
-        }
-    }
-
     match(pathname: string) {
         return isEqual(pathname, this._pathname);
     }
@@ -46,14 +34,18 @@ export class Route {
     render() {
         if (!this._block) {
             this._block = new this._blockClass();
-            render(this._props.rootQuery, this._block);
+        }
+
+        const root = document.querySelector(this._props.rootQuery);
+
+        if (!root) {
             return;
         }
 
-        this._block.show();
+        if (!root.firstChild) {
+            root.appendChild(this._block.element);
+        } else {
+            root.firstChild?.replaceWith(this._block.element);
+        }
     }
 }
-
-// const route = new Route('/buttons', Button, {
-//     rootQuery: '.app',
-// });

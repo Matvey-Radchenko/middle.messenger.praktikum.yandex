@@ -1,30 +1,34 @@
 import { Listener } from './types/eventBus';
 
-export class EventBus {
-    private listeners: Record<string, Listener[]> = {};
+export class EventBus<TEvents extends Record<string, any[]>> {
+    private listeners: {
+        [K in keyof TEvents]?: Listener<TEvents[K]>[];
+    } = {};
 
-    on<T = unknown>(event: string, callback: Listener<T>): void {
+    on<K extends keyof TEvents>(event: K, callback: Listener<TEvents[K]>): void {
         if (!this.listeners[event]) {
             this.listeners[event] = [];
         }
-        this.listeners[event].push(callback);
+        this.listeners[event]!.push(callback);
     }
 
-    off<T = unknown>(event: string, callback: Listener<T>): void {
+    off<K extends keyof TEvents>(event: K, callback: Listener<TEvents[K]>): void {
         if (!this.listeners[event]) {
-            throw new Error(`Нет события: ${event}`);
+            throw new Error(`Нет события: ${String(event)}`);
         }
-
-        this.listeners[event] = this.listeners[event].filter(
+        this.listeners[event] = this.listeners[event]!.filter(
             (listener) => listener !== callback
         );
     }
 
-    emit<T = unknown>(event: string, ...args: T[]): void {
-        if (!this.listeners[event]) {
-            throw new Error(`Нет события: ${event}`);
+    emit<K extends keyof TEvents>(event: K, ...args: TEvents[K]): void {
+        const listeners = this.listeners[event];
+
+        if (!listeners) {
+            console.warn(`Осутствуют обработчики события: ${String(event)}`);
+            return;
         }
 
-        this.listeners[event].forEach((listener) => listener(...args));
+        listeners.forEach((listener) => listener(...args));
     }
 }

@@ -30,6 +30,12 @@ export const CREATE_ACCOUNT_FIELDS: Array<
         validation: USER_REG_EXPS.second_name,
     },
     {
+        name: 'phone',
+        type: 'tel',
+        placeholder: USER_PROP_NAMES.phone,
+        validation: USER_REG_EXPS.phone,
+    },
+    {
         name: 'password',
         type: 'password',
         placeholder: USER_PROP_NAMES.password,

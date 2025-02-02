@@ -1,1 +1,1 @@
-export * from './model/CreateAccountPage';
+export * from './ui/CreateAccountPage';

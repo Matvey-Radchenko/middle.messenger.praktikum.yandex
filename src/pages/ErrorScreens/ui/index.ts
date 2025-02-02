@@ -1,1 +1,1 @@
-export { ErrorScreen } from '../model/ErrorScreen';
+export { ErrorScreen } from './ErrorScreen';

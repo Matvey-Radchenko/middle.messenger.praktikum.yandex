@@ -1,25 +1,20 @@
 import { UserForm } from '@features/UserForm';
-import { CreateAccountPageProps } from './types/CreateAccountPageProps';
+import { CreateAccountPageProps } from '../model/types/CreateAccountPageProps';
 import { Block } from '@shared/lib';
 import { Modal } from '@shared/ui/Modal/Modal';
 import { Button, TextInput } from '@shared/ui';
-import { CREATE_ACCOUNT_FIELDS } from './fields';
-import { createUser, User } from '@entities/User';
+import { CREATE_ACCOUNT_FIELDS } from '../model/fields';
+import { UserController, User } from '@entities/User';
 
 export class CreateAccountPage extends Block {
-    onCreateAccount: CreateAccountPageProps['onCreateAccount'];
+    onCreateAccount?: CreateAccountPageProps['onCreateAccount'];
 
     async handleSubmit(event: SubmitEvent) {
         const data = Object.fromEntries(new FormData(event.target as HTMLFormElement));
-        const user = await createUser(data as User);
-        console.log('CreateAccountPage ~ handleSubmit ~ data:', data);
-
-        if (user) {
-            this.onCreateAccount(user);
-        }
+        UserController.signup(data as User);
     }
 
-    constructor({ onCreateAccount }: CreateAccountPageProps) {
+    constructor() {
         super({
             modal: new Modal({
                 children: new UserForm({
@@ -37,8 +32,6 @@ export class CreateAccountPage extends Block {
                 }),
             }),
         });
-
-        this.onCreateAccount = onCreateAccount;
     }
 
     render() {

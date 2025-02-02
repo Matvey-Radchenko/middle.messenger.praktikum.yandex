@@ -1,4 +1,4 @@
-import { Block } from '@shared/lib/block';
+import { BlockConstructor } from '@shared/lib/block';
 import { Route } from './Route';
 
 export class Router {
@@ -7,6 +7,10 @@ export class Router {
     history: History = window.history;
     private _currentRoute: Route | null = null;
     private _rootQuery!: string;
+
+    public static get instance(): Router {
+        return Router.__instance;
+    }
 
     constructor(rootQuery: string) {
         if (Router.__instance) {
@@ -18,7 +22,7 @@ export class Router {
         Router.__instance = this;
     }
 
-    use(pathname: string, block: new (...args: unknown[]) => Block) {
+    use(pathname: string, block: BlockConstructor) {
         const route = new Route({
             pathname,
             view: block,
@@ -38,14 +42,11 @@ export class Router {
     }
 
     _onRoute(pathname: string) {
-        const route = this._getRoute(pathname);
+        const route = this._getRoute(pathname) || this.routes.at(-1);
 
         if (!route) {
+            console.warn('Страница по данному пути не найдена');
             return;
-        }
-
-        if (this._currentRoute) {
-            this._currentRoute.leave();
         }
 
         this._currentRoute = route;

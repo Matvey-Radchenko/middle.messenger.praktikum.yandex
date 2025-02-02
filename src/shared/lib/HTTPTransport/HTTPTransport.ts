@@ -1,8 +1,15 @@
 import { RequestOptions, OptionsWithoutMethod } from './types';
 import { METHODS } from './methods';
 import { queryStringify } from '../utils/queryStringify';
+import { isPlainObject } from '@shared/lib';
 
 export class HTTPTransport {
+    baseUrl: string;
+
+    constructor(baseUrl: string) {
+        this.baseUrl = baseUrl;
+    }
+
     private request(
         url: string,
         { method = 'GET', data = null, headers = {}, timeout = 5000 }: RequestOptions
@@ -31,8 +38,18 @@ export class HTTPTransport {
 
             if (isGet) {
                 xhr.send();
+            } else if (isPlainObject(data)) {
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify(data));
+            } else if (
+                typeof data === 'string' ||
+                data instanceof Blob ||
+                data instanceof ArrayBuffer ||
+                data instanceof FormData
+            ) {
+                xhr.send(data);
             } else {
-                xhr.send(typeof data === 'object' ? JSON.stringify(data) : data);
+                throw new Error('Invalid data type');
             }
         });
     }
@@ -55,23 +72,36 @@ export class HTTPTransport {
     }
 
     get(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-        const fullUrl = options.data ? url + queryStringify(options.data) : url;
+        const fullUrl =
+            this.baseUrl + (options.data ? url + queryStringify(options.data) : url);
         return this.requestWithRetries(fullUrl, { ...options, method: METHODS.GET });
     }
 
     post(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-        return this.requestWithRetries(url, { ...options, method: METHODS.POST });
+        return this.requestWithRetries(this.baseUrl + url, {
+            ...options,
+            method: METHODS.POST,
+        });
     }
 
     put(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-        return this.requestWithRetries(url, { ...options, method: METHODS.PUT });
+        return this.requestWithRetries(this.baseUrl + url, {
+            ...options,
+            method: METHODS.PUT,
+        });
     }
 
     patch(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-        return this.requestWithRetries(url, { ...options, method: METHODS.PATCH });
+        return this.requestWithRetries(this.baseUrl + url, {
+            ...options,
+            method: METHODS.PATCH,
+        });
     }
 
     delete(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-        return this.requestWithRetries(url, { ...options, method: METHODS.DELETE });
+        return this.requestWithRetries(this.baseUrl + url, {
+            ...options,
+            method: METHODS.DELETE,
+        });
     }
 }

@@ -1,101 +1,21 @@
-import './customHistory';
-import { CreateAccountPage, LogInPage, ChatPage, ErrorScreen, ProfilePage } from '@pages';
-import { User } from '@entities';
-import { Block, Router } from '@shared/lib';
-import { Link } from '@shared/ui';
+import { CreateAccountPage, LogInPage, ChatPage, ProfilePage } from '@pages';
+import { Router, Store } from '@shared/lib';
+import { InternalServerErrorPage, NotFoundErrorPage } from '@pages/ErrorScreens';
+import { MOCK_USER } from '@entities/User/api/mock/mockUser';
 
 export class App {
-    rootElement: HTMLElement;
-    user?: User;
-    router = new Router('.app');
-
-    get route() {
-        return window.location.pathname;
-    }
+    router = new Router('#app');
 
     constructor() {
-        this.rootElement = document.getElementById('app')!;
-        this.attachListeners();
+        this.router
+            .use('/login', LogInPage)
+            .use('/create-account', CreateAccountPage)
+            .use('/profile', ProfilePage)
+            .use('/chat', ChatPage)
+            .use('/500', InternalServerErrorPage)
+            .use('/404', NotFoundErrorPage)
+            .start();
 
-        if (!this.user && ['/chat', '/profile'].includes(this.route)) {
-            history.pushState(null, '', '/login');
-            alert('Cначала необходимо войти в аккаунт');
-            return;
-        }
-
-        if (this.route === '/') {
-            history.pushState(null, '', '/login');
-        }
-    }
-
-    logOut() {
-        this.user = undefined;
-        history.pushState(null, '', '/login');
-    }
-
-    setUser(user: User) {
-        this.user = user;
-    }
-
-    handleAuth(data: User) {
-        this.setUser(data);
-        history.pushState(null, '', '/chat');
-    }
-
-    attachListeners() {
-        window.addEventListener('historychange', () => this.render());
-
-        document.addEventListener('click', (event) => {
-            const link = (event.target as HTMLElement).closest('[data-link]');
-
-            if (link) {
-                event.preventDefault();
-                history.pushState(null, '', link.getAttribute('href')!);
-            }
-        });
-    }
-
-    render() {
-        const page = (
-            {
-                '/create-account': () =>
-                    new CreateAccountPage({
-                        onCreateAccount: this.handleAuth.bind(this),
-                    }),
-                '/login': () => new LogInPage({ onLogIn: this.handleAuth.bind(this) }),
-                '/chat': () => new ChatPage(),
-                '/profile': () =>
-                    new ProfilePage(
-                        this.user!,
-                        this.setUser.bind(this),
-                        this.logOut.bind(this)
-                    ),
-                '/500': () =>
-                    new ErrorScreen({
-                        code: 500,
-                        message: 'Куда я жмал?',
-                        link: new Link({ text: 'Назад к чатам', href: '/chat' }),
-                    }),
-                '/404': () =>
-                    new ErrorScreen({
-                        code: 404,
-                        message: 'Ты куда звóнишь, сынок?',
-                        link: new Link({ text: 'Назад к чатам', href: '/chat' }),
-                    }),
-            } as Record<string, () => Block>
-        )[this.route]?.();
-
-        if (!page) {
-            history.replaceState(null, '', '/404');
-            return;
-        }
-
-        if (this.rootElement.firstElementChild) {
-            this.rootElement.firstElementChild.replaceWith(page.element);
-        } else {
-            this.rootElement.appendChild(page.element);
-        }
-
-        page.dispatchComponentDidMount();
+        Store.set('user', MOCK_USER);
     }
 }

@@ -12,8 +12,6 @@ export function set(target: Indexed, path: string, value: unknown): Indexed {
     let currentObject: Indexed = target as Indexed;
 
     path.split('.').forEach((key, index, keys) => {
-        console.log(key);
-
         if (index != keys.length - 1) {
             const newObject = { [key]: {} };
             Object.assign(currentObject, newObject);

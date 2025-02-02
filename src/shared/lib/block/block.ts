@@ -2,17 +2,25 @@ import { v4 as uuid } from 'uuid';
 import { EventBus } from './eventBus';
 import Handlebars from 'handlebars';
 
-export abstract class Block<Props extends Record<string, any> = Record<string, any>> {
-    // 1. Статические свойства/методы
-    static EVENTS = {
-        INIT: 'init',
-        FLOW_CDM: 'flow:component-did-mount',
-        FLOW_COMPILE: 'flow:compile',
-        FLOW_CDU: 'flow:component-did-update',
-    };
+enum BlockEvents {
+    Init = 'init',
+    FlowCDM = 'flow:component-did-mount',
+    FlowCompile = 'flow:compile',
+    FlowCDU = 'flow:component-did-update',
+}
 
+type BlockEventsMap<P extends Indexed> = {
+    [BlockEvents.Init]: [];
+    [BlockEvents.FlowCDM]: [];
+    [BlockEvents.FlowCompile]: [];
+    [BlockEvents.FlowCDU]: [oldProps: P, newProps: P];
+};
+
+export abstract class Block<Props extends Indexed = Indexed> {
+    // 1. Статические свойства/методы
     // 2. Приватные свойства
-    private eventBus: EventBus;
+    private eventBus: EventBus<BlockEventsMap<Props>>;
+
     private _element: HTMLElement | null = null;
     private _id: string | null = null;
 
@@ -30,7 +38,7 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
         this.eventBus = eventBus;
 
         this._registerEvents(eventBus);
-        eventBus.emit(Block.EVENTS.INIT);
+        eventBus.emit(BlockEvents.Init);
     }
 
     // 5. Геттеры
@@ -49,27 +57,13 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
         }
 
         const { props: newProps, children: newChildren } = this._sortProps(payload);
-        // console.log('Block<Props ~ setProps ~ newChildren:', newChildren)
-        // console.log('Block<Props ~ setProps ~ newProps:', newProps)
 
         Object.assign(this.props, newProps);
         Object.assign(this.children, newChildren);
     }
 
     public dispatchComponentDidMount() {
-        this.eventBus.emit(Block.EVENTS.FLOW_CDM);
-    }
-
-    public show() {
-        if (this.element) {
-            this.element.style.display = 'block';
-        }
-    }
-
-    public hide() {
-        if (this.element) {
-            this.element.style.display = 'none';
-        }
+        this.eventBus.emit(BlockEvents.FlowCDM);
     }
 
     // 7. Публичные методы для переопределения
@@ -80,16 +74,15 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
     protected componentDidMount() {}
 
     protected componentDidUpdate(oldProps: Props, newProps: Props): boolean {
-        console.log(oldProps, newProps);
         return true;
     }
 
     // 8. Приватные методы
-    private _registerEvents(eventBus: EventBus) {
-        eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
-        eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
-        eventBus.on(Block.EVENTS.FLOW_COMPILE, this._compile.bind(this));
-        eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+    private _registerEvents(eventBus: typeof this.eventBus) {
+        eventBus.on(BlockEvents.Init, this.init.bind(this));
+        eventBus.on(BlockEvents.FlowCDM, this._componentDidMount.bind(this));
+        eventBus.on(BlockEvents.FlowCompile, this._compile.bind(this));
+        eventBus.on(BlockEvents.FlowCDU, this._componentDidUpdate.bind(this));
     }
 
     private _componentDidMount() {
@@ -100,7 +93,7 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
         const response = this.componentDidUpdate(oldProps, newProps);
 
         if (response) {
-            this.eventBus.emit(Block.EVENTS.FLOW_COMPILE);
+            this.eventBus.emit(BlockEvents.FlowCompile);
         }
     }
 
@@ -149,11 +142,18 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
                 const value = target[prop];
                 return typeof value === 'function' ? value.bind(target) : value;
             },
-            set: (target: T, key: string | symbol, value: any): boolean => {
-                if (typeof key === 'string') {
-                    target[key as keyof T] = value;
-                    this.eventBus.emit(Block.EVENTS.FLOW_CDU);
+            set: (target: T, key: string | symbol, value: unknown): boolean => {
+                if (typeof key !== 'string') {
+                    return false;
                 }
+
+                const oldProps = { ...this.props, ...this.children };
+
+                target[key as keyof T] = value as T[keyof T];
+
+                const newProps = { ...this.props, ...this.children };
+
+                this.eventBus.emit(BlockEvents.FlowCDU, oldProps, newProps);
 
                 return true;
             },
@@ -174,7 +174,7 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
             if (isChild || areChildren) {
                 children[key] = [value].flat();
             } else {
-                props[key as keyof Props] = value;
+                (props as Indexed)[key] = value;
             }
         });
 
@@ -184,12 +184,13 @@ export abstract class Block<Props extends Record<string, any> = Record<string, a
     private _addListeners() {
         Object.entries(this.props).forEach(([key, value]) => {
             if (key.startsWith('on') && value instanceof Function) {
-                this._element?.addEventListener(key.slice(2).toLowerCase(), value);
+                const event = key.slice(2).toLowerCase() as keyof HTMLElementEventMap;
+                this._element?.addEventListener(event, value as EventListener);
             }
         });
     }
 
     init() {
-        this.eventBus.emit(Block.EVENTS.FLOW_COMPILE);
+        this.eventBus.emit(BlockEvents.FlowCompile);
     }
 }

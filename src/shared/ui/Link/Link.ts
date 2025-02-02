@@ -1,9 +1,15 @@
-import { Block } from '@shared/lib';
+import { Block, Router } from '@shared/lib';
 import { LinkProps } from './LinkProps';
 
 export class Link extends Block {
     constructor(props: LinkProps) {
-        super(props);
+        super({
+            ...props,
+            onclick: () => {
+                console.log(props.href);
+                Router.instance.go(props.href);
+            },
+        });
     }
 
     render() {

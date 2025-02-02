@@ -1,2 +1,2 @@
 export * from './model/types/LogInPageProps';
-export * from './model/LogInPage';
+export * from './ui/LogInPage';
