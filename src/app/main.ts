@@ -1,5 +1,6 @@
 import { App } from './model/App';
 
 document.addEventListener('DOMContentLoaded', () => {
-    new App();
+    const app = new App();
+    document.getElementsByTagName('body')[0].appendChild(app.element);
 });

@@ -1,10 +1,10 @@
 import { isEqual } from '@shared/lib';
 import { Block, BlockConstructor } from '@shared/lib/block';
 
-type RouteProps = {
+export type RouteProps = {
     pathname: string;
     view: BlockConstructor;
-    props: { rootQuery: string };
+    props: { rootQuery: string; requiredAuth?: boolean };
 };
 
 export class Route {
@@ -17,14 +17,18 @@ export class Route {
         this._pathname = pathname;
         this._blockClass = view;
         this._block = null;
-        this._props = props;
+        this._props = {
+            rootQuery: props.rootQuery,
+            requiredAuth: props.requiredAuth ?? false,
+        };
     }
 
-    navigate(pathname: string) {
-        if (this.match(pathname)) {
-            this.render();
-            this._pathname = pathname;
-        }
+    public get requiredAuth() {
+        return this._props.requiredAuth;
+    }
+
+    public get pathname() {
+        return this._pathname;
     }
 
     match(pathname: string) {

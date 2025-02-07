@@ -5,10 +5,7 @@ export class Link extends Block {
     constructor(props: LinkProps) {
         super({
             ...props,
-            onclick: () => {
-                console.log(props.href);
-                Router.instance.go(props.href);
-            },
+            onclick: () => Router.instance.go(props.href),
         });
     }
 

@@ -17,6 +17,7 @@ export class HTTPTransport {
         return new Promise<XMLHttpRequest>((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.open(method, url);
+            xhr.withCredentials = true;
 
             Object.entries(headers).forEach(([key, value]) =>
                 xhr.setRequestHeader(key, value)

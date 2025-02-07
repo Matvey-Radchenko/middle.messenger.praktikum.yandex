@@ -1,22 +1,33 @@
 import { User, USER_REG_EXPS } from '@entities';
-import { Block, connect } from '@shared/lib';
+import { Block, StoreConnector, Store } from '@shared/lib';
 import { AttributeRow, Avatar, Button, Link, TextInput } from '@shared/ui';
 import { USER_PROP_NAMES } from '../../../entities/User/model/userPropNames';
+import { AuthController } from '@entities/User';
 import './ProfilePage.css';
 
+@StoreConnector((state) => ({
+    user: state.user as User,
+    userAttributes: (
+        Object.entries((state?.user as User) || {}) as Array<[keyof User, string]>
+    )?.map(([key, value]) => new AttributeRow({ name: USER_PROP_NAMES[key], value })),
+}))
 class ProfilePage extends Block {
     editMode?: 'user' | 'password';
 
-    constructor(props?: Indexed) {
-        const user = props?.user || {};
+    constructor() {
+        const user = (Store.getState()?.user as User) || {};
 
         super({
+            ...user,
             onsubmit: (e: SubmitEvent) => this.handleSumbit(e),
             editMode: false,
             backLink: new Link({
                 text: '< назад',
                 href: '/chat',
             }),
+            userAttributes: (Object.entries(user) as Array<[keyof User, string]>)?.map(
+                ([key, value]) => new AttributeRow({ name: USER_PROP_NAMES[key], value })
+            ),
             userAvatar: new Avatar({
                 src: 'https://sun1-47.userapi.com/s/v1/ig2/J4tV5J9d2XW2_HeaoE_tHhBMNbrTvy7h5zjPbgYw-7opMxvybxS49Ig7cOUnr0gVEA9uGUJDZGlvfrRrwDpQGb8o.jpg?quality=95&as=32x31,48x46,72x69,108x104,160x154,240x231,360x346,480x462,540x519,640x616,720x693,735x707&from=bu&u=p8W56VA_LlspHhMGsdv9mUjamvyE-yDxtoGME6PDIZA&cs=604x581',
                 initials: 'CG',
@@ -40,7 +51,7 @@ class ProfilePage extends Block {
                         text: 'Выйти',
                         class: 'danger',
                         size: 'sm',
-                        // onclick: () => this.logOut(),
+                        onclick: () => AuthController.logout(),
                     },
                 ] as const
             ).map((action) => new Button(action)),
@@ -135,7 +146,6 @@ class ProfilePage extends Block {
         e.preventDefault();
 
         const data = Object.fromEntries(new FormData(e.target as HTMLFormElement));
-        console.log(data);
 
         const isValid = this.children.inputs.every((input) =>
             (input as TextInput).validate()
@@ -180,11 +190,4 @@ class ProfilePage extends Block {
     }
 }
 
-const ProfilePageWithUser = connect(ProfilePage, (state) => ({
-    user: state.user,
-    userAttributes: (
-        Object.entries((state?.user as User) || {}) as Array<[keyof User, string]>
-    )?.map(([key, value]) => new AttributeRow({ name: USER_PROP_NAMES[key], value })),
-}));
-
-export { ProfilePageWithUser as ProfilePage };
+export { ProfilePage };

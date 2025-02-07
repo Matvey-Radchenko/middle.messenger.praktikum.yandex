@@ -51,7 +51,7 @@ export abstract class Block<Props extends Indexed = Indexed> {
     }
 
     // 6. Публичные методы
-    public setProps(payload: Props) {
+    public setProps(payload: Partial<Props>) {
         if (!payload) {
             return;
         }
@@ -163,7 +163,7 @@ export abstract class Block<Props extends Indexed = Indexed> {
         });
     }
 
-    private _sortProps(propsWithChildren: Props) {
+    private _sortProps(propsWithChildren: Partial<Props>) {
         const children: typeof this.children = {};
         const props: typeof this.props = {} as Props;
 

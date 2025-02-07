@@ -15,7 +15,6 @@ export function set(target: Indexed, path: string, value: unknown): Indexed {
         if (index != keys.length - 1) {
             const newObject = { [key]: {} };
             Object.assign(currentObject, newObject);
-            console.log(currentObject);
             currentObject = newObject[key];
         } else {
             currentObject[key] = value;

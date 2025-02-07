@@ -4,14 +4,14 @@ import { Block } from '@shared/lib';
 import { Modal } from '@shared/ui/Modal/Modal';
 import { Button, TextInput } from '@shared/ui';
 import { CREATE_ACCOUNT_FIELDS } from '../model/fields';
-import { UserController, User } from '@entities/User';
+import { AuthController, User } from '@entities/User';
 
 export class CreateAccountPage extends Block {
     onCreateAccount?: CreateAccountPageProps['onCreateAccount'];
 
     async handleSubmit(event: SubmitEvent) {
         const data = Object.fromEntries(new FormData(event.target as HTMLFormElement));
-        UserController.signup(data as User);
+        AuthController.signup(data as User);
     }
 
     constructor() {
