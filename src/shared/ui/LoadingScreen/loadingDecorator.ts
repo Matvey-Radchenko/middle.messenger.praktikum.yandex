@@ -18,8 +18,7 @@ export function loadingDecorator(caption: string): MethodDecorator {
             } as LoadingScreenProps);
 
             try {
-                const result = await originalMethod.apply(this, args);
-                return result;
+                return await originalMethod.apply(this, args);
             } finally {
                 Store.set('spinner', {
                     visible: false,

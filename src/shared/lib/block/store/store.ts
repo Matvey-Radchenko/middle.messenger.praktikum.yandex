@@ -9,8 +9,8 @@ import { BlockConstructor } from '@shared/lib/block/types/block';
 class Store extends EventBus<StoreEventsMap> {
     private state: Indexed = {};
 
-    public getState() {
-        return this.state;
+    public getState<T = unknown>(route?: string): T {
+        return (route ? this.state[route] : this.state) as T;
     }
 
     public set(path: string, value: unknown) {
@@ -22,11 +22,11 @@ class Store extends EventBus<StoreEventsMap> {
 
 const storeInstance = new Store();
 
-export function StoreConnector<P extends Indexed, C extends BlockConstructor<P>>(
+export function StoreConnector<P extends Indexed>(
     selector: (state: Indexed) => Partial<P>
 ) {
-    return function (Component: C): C {
-        return class extends Component {
+    return function <C extends BlockConstructor<P>>(Component: C): C {
+        const DecoratedClass = class extends Component {
             constructor(...args: any[]) {
                 const props = (args[0] || {}) as P;
 
@@ -36,6 +36,7 @@ export function StoreConnector<P extends Indexed, C extends BlockConstructor<P>>
 
                 storeInstance.on(StoreEvents.Updated, () => {
                     const newStateSlice = selector(storeInstance.getState());
+
                     if (!isEqual(stateSlice, newStateSlice)) {
                         this.setProps({ ...newStateSlice });
                         stateSlice = newStateSlice;
@@ -43,6 +44,8 @@ export function StoreConnector<P extends Indexed, C extends BlockConstructor<P>>
                 });
             }
         };
+
+        return DecoratedClass as unknown as C;
     };
 }
 

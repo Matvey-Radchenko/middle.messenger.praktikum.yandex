@@ -1,7 +1,7 @@
-import { User } from '@entities';
+import { UserProfile } from '@entities/User';
 
 export const USER_PROP_NAMES: Record<
-    keyof User | 'password' | 'password_repeat',
+    keyof UserProfile | 'password' | 'password_repeat',
     string
 > = {
     email: 'Почта',

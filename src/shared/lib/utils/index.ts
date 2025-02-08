@@ -8,3 +8,4 @@ export { isArray } from './isArray';
 export { isPlainObject } from './isPlainObject';
 export { isArrayOrObject } from './isArrayOrObject';
 export { merge } from './merge';
+export { omit } from './omit';

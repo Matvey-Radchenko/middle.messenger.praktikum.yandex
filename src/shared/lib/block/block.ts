@@ -44,7 +44,7 @@ export abstract class Block<Props extends Indexed = Indexed> {
     // 5. Геттеры
     get element(): HTMLElement {
         if (!this._element) {
-            throw new Error('Элемент ещё не был создан');
+            throw new Error(`Элемент ${this.constructor.name} ещё не был создан`);
         }
 
         return this._element;

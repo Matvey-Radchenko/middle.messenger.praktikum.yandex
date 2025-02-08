@@ -1,24 +1,18 @@
-import { LogInData, User } from '@entities/User';
+import { LogInData, User, UserProfile } from '@entities/User';
 import { HTTPTransport } from '@shared/lib';
 
 const APIInstance = new HTTPTransport('https://ya-praktikum.tech/api/v2/auth/');
 
 class AuthAPI {
-    signup(payload: User) {
+    signup(payload: UserProfile) {
         return APIInstance.post('signup', {
             data: payload,
-            headers: {
-                accept: 'application/json',
-            },
         });
     }
 
     signin(loginData: LogInData) {
         return APIInstance.post('signin', {
             data: loginData,
-            headers: {
-                accept: 'application/json',
-            },
         });
     }
 
@@ -27,11 +21,7 @@ class AuthAPI {
     }
 
     get() {
-        return APIInstance.get('user', {
-            headers: {
-                accept: 'application/json',
-            },
-        });
+        return APIInstance.get<User>('user');
     }
 }
 

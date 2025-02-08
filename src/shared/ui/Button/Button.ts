@@ -9,7 +9,7 @@ export class Button extends Block {
     render() {
         return `
 			<{{#if link}}a{{else}}button{{/if}}
-				id='{{id}}'
+				{{#if id}}id='{{id}}'{{/if}}
 				type={{#if type}}'{{type}}'{{else}}'button'{{/if}}
 				class='
 					button 

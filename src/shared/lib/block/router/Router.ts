@@ -38,8 +38,8 @@ export class Router {
         Router.__instance = this;
 
         Store.on(StoreEvents.Updated, () => {
-            const state = Store.getState();
-            this._isAuth = Boolean(state.isAuth);
+            const isAuth = Store.getState<boolean>('isAuth');
+            this._isAuth = Boolean(isAuth);
         });
     }
 
@@ -47,9 +47,9 @@ export class Router {
         return window.location.pathname;
     }
 
-    use(
+    use<T extends BlockConstructor>(
         pathname: string,
-        block: BlockConstructor,
+        block: T,
         props?: Omit<RouteProps['props'], 'rootQuery'>
     ) {
         const route = new Route({
@@ -80,12 +80,16 @@ export class Router {
 
         if (!route && this.currentPath === '/') {
             console.warn('Router. На корневом пути нет страницы');
-            this.go(this.routes[0].pathname);
+            const route = this._isAuth
+                ? this.routes.find((route) => route.requiredAuth) || this.routes[0]
+                : this.routes[0];
+
+            this.go(route.pathname);
             return;
         }
 
         if (!route) {
-            console.warn('Router. Страница по данному пути не найдена');
+            console.warn('Router. Страница по данному пути не найдена:', pathname);
             this.go(this._pageNotFoundPath);
             return;
         }

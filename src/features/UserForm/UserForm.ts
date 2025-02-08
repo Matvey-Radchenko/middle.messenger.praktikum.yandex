@@ -12,8 +12,6 @@ export class UserForm extends Block {
             (child as TextInput).validate()
         );
 
-        //TODO arePasswordEqual
-
         if (!isValid) {
             return;
         }

@@ -1,22 +1,23 @@
 import { UserForm } from '@features/UserForm';
 import { CreateAccountPageProps } from '../model/types/CreateAccountPageProps';
-import { Block } from '@shared/lib';
+import { Block, Router } from '@shared/lib';
 import { Modal } from '@shared/ui/Modal/Modal';
 import { Button, TextInput } from '@shared/ui';
 import { CREATE_ACCOUNT_FIELDS } from '../model/fields';
-import { AuthController, User } from '@entities/User';
+import { AuthController, UserProfile } from '@entities/User';
 
 export class CreateAccountPage extends Block {
     onCreateAccount?: CreateAccountPageProps['onCreateAccount'];
 
     async handleSubmit(event: SubmitEvent) {
         const data = Object.fromEntries(new FormData(event.target as HTMLFormElement));
-        AuthController.signup(data as User);
+        AuthController.signup(data as unknown as UserProfile);
     }
 
     constructor() {
         super({
             modal: new Modal({
+                visible: true,
                 children: new UserForm({
                     title: 'Регистрация',
                     fields: CREATE_ACCOUNT_FIELDS.map((field) => new TextInput(field)),
@@ -26,7 +27,11 @@ export class CreateAccountPage extends Block {
                             text: 'Зарегистрироваться',
                             class: 'primary',
                         }),
-                        new Button({ text: 'Войти', link: '/login' }),
+                        new Button({
+                            text: 'Войти',
+                            onclick: () => Router.instance.go('/login'),
+                            link: true,
+                        }),
                     ],
                     onSubmit: (e) => this.handleSubmit(e),
                 }),

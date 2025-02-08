@@ -1,6 +1,6 @@
 import { LOGIN_ACCOUNT_FIELDS } from '../model/fields';
 import { LogInData, AuthController } from '@entities/User';
-import { Block } from '@shared/lib';
+import { Block, Router } from '@shared/lib';
 import { UserForm } from '@features/UserForm';
 import { Button, Modal, TextInput } from '@shared/ui';
 
@@ -14,6 +14,7 @@ export class LogInPage extends Block {
     constructor() {
         super({
             modal: new Modal({
+                visible: true,
                 children: new UserForm({
                     title: 'Вход',
                     fields: LOGIN_ACCOUNT_FIELDS.map((field) => new TextInput(field)),
@@ -26,15 +27,14 @@ export class LogInPage extends Block {
                         }),
                         new Button({
                             text: 'Нет аккаунта?',
-                            link: '/create-account',
+                            onclick: () => Router.instance.go('/create-account'),
+                            link: true,
                         }),
                     ],
                     onSubmit: (e) => this.handleSubmit(e),
                 }),
             }),
         });
-
-        // this.onLogIn = onLogIn;
     }
 
     render() {

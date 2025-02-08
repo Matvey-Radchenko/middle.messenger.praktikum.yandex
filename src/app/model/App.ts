@@ -1,5 +1,5 @@
 import { CreateAccountPage, LogInPage, ChatPage, ProfilePage } from '@pages';
-import { Block, Router, Store } from '@shared/lib';
+import { Block, BlockConstructor, Router, Store } from '@shared/lib';
 import {
     InternalServerErrorPage,
     NotFoundErrorPage,
@@ -8,6 +8,7 @@ import {
 import { AuthController } from '@entities/User';
 import { LoadingScreen } from '@shared/ui';
 import { Toast, ToastProps } from '@shared/ui';
+import { isHTTPResponse } from '@shared/lib/HTTPTransport/types';
 
 export class App extends Block {
     router = new Router({
@@ -26,9 +27,9 @@ export class App extends Block {
             this.router
                 .use('/login', LogInPage)
                 .use('/create-account', CreateAccountPage)
-                .use('/profile', ProfilePage, { requiredAuth: true })
                 .use('/chat', ChatPage, { requiredAuth: true })
-                .use('/500', InternalServerErrorPage, { requiredAuth: true })
+                .use('/profile', ProfilePage as BlockConstructor, { requiredAuth: true })
+                .use('/500', InternalServerErrorPage)
                 .use('/401', UnauthorizedErrorPage)
                 .use('/404', NotFoundErrorPage)
                 .start();
@@ -55,11 +56,19 @@ export class App extends Block {
         window.addEventListener('unhandledrejection', (event) => {
             console.warn('UnhandledRejection', event);
 
-            Store.set('toast', {
-                visible: true,
-                message: event.reason,
-                type: 'error',
-            } as ToastProps);
+            if (isHTTPResponse(event.reason)) {
+                const response = event.reason;
+
+                if (response.ok) {
+                    return;
+                }
+
+                Store.set('toast', {
+                    visible: true,
+                    message: `Ошибка: ${response.status} - ${response.error}`,
+                    type: 'error',
+                } as ToastProps);
+            }
         });
     }
 

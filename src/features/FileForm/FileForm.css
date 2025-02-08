@@ -1,0 +1,69 @@
+.file-form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 340px;
+
+    &__title {
+        margin: 0;
+
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--line-height-base);
+        color: var(--text-color);
+        text-align: center;
+
+        &_error {
+            color: var(--danger-color);
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+
+        width: 100%;
+    }
+
+    &__footer {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    &__error {
+        font-size: var(--font-size-xs);
+        line-height: var(--line-height-sm);
+        color: var(--danger-color);
+        text-align: center;
+    }
+
+    &__filename {
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-sm);
+        color: var(--text-color-secondary);
+        text-align: center;
+        word-break: break-all;
+    }
+
+    &__select-button {
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-sm);
+        color: var(--primary-color);
+        text-decoration: none;
+
+        &:hover {
+            color: var(--primary-color-hover);
+        }
+
+        &:active {
+            color: var(--primary-color-active);
+        }
+    }
+}

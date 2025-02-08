@@ -1,4 +1,4 @@
-import { RequestOptions, OptionsWithoutMethod } from './types';
+import { RequestOptions, OptionsWithoutMethod, HTTPResponse } from './types';
 import { METHODS } from './methods';
 import { queryStringify } from '../utils/queryStringify';
 import { isPlainObject } from '@shared/lib';
@@ -10,11 +10,13 @@ export class HTTPTransport {
         this.baseUrl = baseUrl;
     }
 
-    private request(
+    private request<T = unknown>(
         url: string,
-        { method = 'GET', data = null, headers = {}, timeout = 5000 }: RequestOptions
-    ): Promise<XMLHttpRequest> {
-        return new Promise<XMLHttpRequest>((resolve, reject) => {
+        { method = 'GET', data = null, headers = {}, timeout = 15000 }: RequestOptions
+    ) {
+        headers.accept = headers.accept || 'application/json';
+
+        return new Promise<HTTPResponse<T>>((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.open(method, url);
             xhr.withCredentials = true;
@@ -25,9 +27,18 @@ export class HTTPTransport {
 
             xhr.onload = () => {
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    resolve(xhr);
+                    const response =
+                        xhr.response !== 'OK' && headers['accept'] === 'application/json'
+                            ? JSON.parse(xhr.response)
+                            : xhr.response;
+
+                    resolve({ value: response, status: xhr.status, ok: true });
                 } else {
-                    reject(new Error(`HTTP Error: ${xhr.status} - ${xhr.statusText}`));
+                    reject({
+                        error: JSON.parse(xhr.response).reason,
+                        status: xhr.status,
+                        ok: false,
+                    });
                 }
             };
 
@@ -55,10 +66,10 @@ export class HTTPTransport {
         });
     }
 
-    private async requestWithRetries(
+    private async requestWithRetries<T>(
         url: string,
         options: RequestOptions
-    ): Promise<XMLHttpRequest> {
+    ): Promise<HTTPResponse<T>> {
         const { tries = 1 } = options;
 
         for (let i = 0; i < tries; i++) {
@@ -72,35 +83,35 @@ export class HTTPTransport {
         throw new Error('Request failed after maximum retries');
     }
 
-    get(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+    get<T>(url: string, options: OptionsWithoutMethod = {}): Promise<HTTPResponse<T>> {
         const fullUrl =
             this.baseUrl + (options.data ? url + queryStringify(options.data) : url);
-        return this.requestWithRetries(fullUrl, { ...options, method: METHODS.GET });
+        return this.requestWithRetries<T>(fullUrl, { ...options, method: METHODS.GET });
     }
 
-    post(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-        return this.requestWithRetries(this.baseUrl + url, {
+    post<T>(url: string, options: OptionsWithoutMethod = {}): Promise<HTTPResponse<T>> {
+        return this.requestWithRetries<T>(this.baseUrl + url, {
             ...options,
             method: METHODS.POST,
         });
     }
 
-    put(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-        return this.requestWithRetries(this.baseUrl + url, {
+    put<T>(url: string, options: OptionsWithoutMethod = {}): Promise<HTTPResponse<T>> {
+        return this.requestWithRetries<T>(this.baseUrl + url, {
             ...options,
             method: METHODS.PUT,
         });
     }
 
-    patch(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-        return this.requestWithRetries(this.baseUrl + url, {
+    patch<T>(url: string, options: OptionsWithoutMethod = {}): Promise<HTTPResponse<T>> {
+        return this.requestWithRetries<T>(this.baseUrl + url, {
             ...options,
             method: METHODS.PATCH,
         });
     }
 
-    delete(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-        return this.requestWithRetries(this.baseUrl + url, {
+    delete<T>(url: string, options: OptionsWithoutMethod = {}): Promise<HTTPResponse<T>> {
+        return this.requestWithRetries<T>(this.baseUrl + url, {
             ...options,
             method: METHODS.DELETE,
         });
