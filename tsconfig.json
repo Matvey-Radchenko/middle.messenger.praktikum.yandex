@@ -12,6 +12,7 @@
         "esModuleInterop": true,
         "outDir": "./dist",
         "baseUrl": "./",
+        "experimentalDecorators": true,
         "paths": {
             "@pages/*": ["src/pages/*"],
             "@pages": ["src/pages/index"],

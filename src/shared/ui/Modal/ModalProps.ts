@@ -1,6 +1,10 @@
 import { Block } from '@shared/lib';
 
-export interface ModalProps {
+export type ModalProps = {
     children: Block;
     darkBackdrop?: boolean;
-}
+    class?: string;
+    visible?: boolean;
+    closable?: boolean;
+    onclose?: () => void;
+};

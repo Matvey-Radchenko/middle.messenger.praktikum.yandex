@@ -9,4 +9,6 @@ export type TextInputProps = {
         regExp: RegExp;
         errorText: string;
     };
+    oninput?: (e: Event) => void;
+    onkeydown?: (e: KeyboardEvent) => void;
 };

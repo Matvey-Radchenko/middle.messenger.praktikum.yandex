@@ -2,7 +2,7 @@ import { TextInputProps } from '@shared/ui';
 import { User } from './types/User';
 
 export const USER_REG_EXPS: Record<
-    keyof User | 'password',
+    keyof Omit<User, 'id' | 'avatar'> | 'password',
     TextInputProps['validation']
 > = {
     email: {

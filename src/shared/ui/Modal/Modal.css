@@ -1,9 +1,11 @@
 .modal-backdrop {
     position: fixed;
+    z-index: 1;
     top: 0;
     left: 0;
 
     display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
 
@@ -12,7 +14,11 @@
 
     background-color: transparent;
 
-    &__dark {
+    &--visible {
+        display: flex;
+    }
+
+    &--dark {
         background-color: rgb(0 0 0 / 50%);
     }
 }
@@ -22,7 +28,6 @@
 
     box-sizing: border-box;
     width: 340px;
-    min-height: 450px;
     padding: 30px;
 
     background-color: var(--background-color);

@@ -85,5 +85,17 @@
         width: 40px;
         padding: 0;
         border-radius: 100%;
+
+        &.button__size--sm {
+            width: 20px;
+        }
+
+        &.button__size--md {
+            width: 32px;
+        }
+
+        &.button__size--lg {
+            width: 40px;
+        }
     }
 }
