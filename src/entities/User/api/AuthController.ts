@@ -8,8 +8,9 @@ class AuthController {
     signup(user: UserProfile) {
         return AuthAPI.signup(user).then((response) => {
             if (response.ok) {
-                this.getUser();
-                Router.instance.go('/chat');
+                this.getUser().then(() => {
+                    Router.instance.go('/chat');
+                });
             }
         });
     }

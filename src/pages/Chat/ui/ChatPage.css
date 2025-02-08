@@ -26,12 +26,6 @@
                 margin-top: 20px;
             }
         }
-
-        .chat-list {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
     }
 
     .chat-block {
@@ -39,28 +33,6 @@
         flex-direction: column;
         flex-grow: 1;
         height: 100%;
-
-        &__header {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-
-            box-sizing: border-box;
-            height: 54px;
-            padding: 10px 20px;
-
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        &__content {
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            gap: 10px;
-
-            padding: 15px 20px;
-        }
 
         &__footer {
             display: flex;

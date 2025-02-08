@@ -2,6 +2,7 @@ import { UpdateUserPassword } from '../model/types/UpdateUserPassword';
 import { UserAPI } from './UserAPI';
 import { loadingDecorator } from '@shared/ui';
 import { Store } from '@shared/lib';
+import { User } from '@entities/User/model/types/User';
 
 class UserController {
     @loadingDecorator('Обновляем профиль...')
@@ -22,7 +23,8 @@ class UserController {
 
         return UserAPI.updateAvatar(formData).then((response) => {
             if (response.ok) {
-                Store.set('user.avatar', response.value.avatar);
+                const user = Store.getState<User>('user');
+                Store.set('user', { ...user, avatar: response.value.avatar });
             }
 
             return response;

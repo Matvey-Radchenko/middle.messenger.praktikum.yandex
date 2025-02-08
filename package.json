@@ -14,8 +14,7 @@
         "lint:fix": "eslint '**/*.ts' '**/*.js' --fix",
         "lint:styles": "stylelint '**/*.css'",
         "lint:styles:fix": "stylelint '**/*.css' --fix",
-        "format": "prettier --write .",
-        "typecheck": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false"
+        "format": "prettier --write ."
     },
     "author": "",
     "license": "ISC",

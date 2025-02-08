@@ -25,7 +25,8 @@ export function queryStringify(data: PlainObject | object) {
         throw new Error('input must be an object');
     }
 
-    return getParams(data)
-        .map((arr) => arr.join('='))
-        .join('&');
+    const params = getParams(data);
+    const start = params.length ? '?' : '';
+
+    return start + params.map((arr) => arr.join('=')).join('&');
 }

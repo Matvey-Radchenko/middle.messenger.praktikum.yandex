@@ -27,7 +27,7 @@ export class App extends Block {
             this.router
                 .use('/login', LogInPage)
                 .use('/create-account', CreateAccountPage)
-                .use('/chat', ChatPage, { requiredAuth: true })
+                .use('/chat/:id', ChatPage, { requiredAuth: true })
                 .use('/profile', ProfilePage as BlockConstructor, { requiredAuth: true })
                 .use('/500', InternalServerErrorPage)
                 .use('/401', UnauthorizedErrorPage)

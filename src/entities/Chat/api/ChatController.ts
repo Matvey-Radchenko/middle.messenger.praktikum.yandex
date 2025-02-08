@@ -3,45 +3,40 @@ import { loadingDecorator } from '@shared/ui';
 import { Store } from '@shared/lib';
 
 class ChatController {
-    @loadingDecorator('Обновляем профиль...')
-    updateProfile(data: Parameters<typeof ChatAPI.updateProfile>[0]) {
-        return ChatAPI.updateProfile(data).then((response) => {
+    lastGetOptions: Parameters<typeof ChatAPI.getChats>[0] = {
+        offset: 0,
+        limit: 0,
+        title: '',
+    };
+
+    @loadingDecorator('Загружаем чаты...')
+    getChats(data: Parameters<typeof ChatAPI.getChats>[0]) {
+        return ChatAPI.getChats(data).then((response) => {
             if (response.ok) {
-                Store.set('user', response.value);
+                Store.set('chats', response.value);
+                this.lastGetOptions = data;
             }
 
             return response;
         });
     }
 
-    @loadingDecorator('Обновляем аватар...')
-    updateAvatar(file: File) {
-        const formData = new FormData();
-        formData.append('avatar', file);
-
-        return ChatAPI.updateAvatar(formData).then((response) => {
+    createChat(data: Parameters<typeof ChatAPI.createChat>[0]) {
+        return ChatAPI.createChat(data).then((response) => {
             if (response.ok) {
-                Store.set('user.avatar', response.value.avatar);
+                this.getChats(this.lastGetOptions);
             }
 
             return response;
         });
     }
 
-    @loadingDecorator('Обновляем пароль...')
-    updatePassword(data: UpdateUserPassword) {
-        return ChatAPI.updatePassword(data);
+    addUsersToChat(data: Parameters<typeof ChatAPI.addUsersToChat>[0]) {
+        return ChatAPI.addUsersToChat(data);
     }
 
-    @loadingDecorator('Ищем пользователя...')
-    search(login: string) {
-        return ChatAPI.search(login).then((response) => {
-            if (response.ok) {
-                return response.value;
-            }
-
-            return [];
-        });
+    deleteUsersFromChat(data: Parameters<typeof ChatAPI.deleteUsersFromChat>[0]) {
+        return ChatAPI.deleteUsersFromChat(data);
     }
 }
 

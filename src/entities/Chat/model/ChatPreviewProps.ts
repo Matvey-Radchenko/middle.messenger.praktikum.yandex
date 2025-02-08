@@ -1,9 +1,10 @@
-import { MessageProps } from '@entities';
-import { AvatarProps } from '@shared/ui';
+import { Chat } from '@entities/Chat';
 
 export type ChatPreviewProps = {
-    name: string;
-    avatar: Omit<AvatarProps, 'size'>;
-    lastMessage: MessageProps;
-    unreadMessages?: number;
+    id: number;
+    title: string;
+    avatar: string;
+    last_message: Chat['last_message'] & { outgoing: boolean };
+    unread_count?: number;
+    onclick?: () => void;
 };

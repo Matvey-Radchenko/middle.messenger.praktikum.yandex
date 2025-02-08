@@ -168,10 +168,11 @@ export abstract class Block<Props extends Indexed = Indexed> {
         const props: typeof this.props = {} as Props;
 
         Object.entries(propsWithChildren).forEach(([key, value]) => {
+            const previousChildren = key in this.children;
             const isChild = value instanceof Block;
             const areChildren = Array.isArray(value) && value[0] instanceof Block;
 
-            if (isChild || areChildren) {
+            if (previousChildren || isChild || areChildren) {
                 children[key] = [value].flat();
             } else {
                 (props as Indexed)[key] = value;

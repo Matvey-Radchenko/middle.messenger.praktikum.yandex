@@ -1,4 +1,3 @@
-import { isEqual } from '@shared/lib';
 import { Block, BlockConstructor } from '@shared/lib/block';
 
 export type RouteProps = {
@@ -8,13 +7,19 @@ export type RouteProps = {
 };
 
 export class Route {
-    private _pathname: RouteProps['pathname'];
+    private _path: {
+        path: RouteProps['pathname'];
+        param: string | null;
+        full: string;
+    };
     private _blockClass: RouteProps['view'];
     private _props: RouteProps['props'];
     private _block: null | Block;
 
     constructor({ pathname, view, props }: RouteProps) {
-        this._pathname = pathname;
+        const [_, path, param] = pathname.split('/');
+
+        this._path = { path, param, full: pathname };
         this._blockClass = view;
         this._block = null;
         this._props = {
@@ -28,11 +33,12 @@ export class Route {
     }
 
     public get pathname() {
-        return this._pathname;
+        return this._path;
     }
 
     match(pathname: string) {
-        return isEqual(pathname, this._pathname);
+        const [_, main = '/'] = pathname.split('/');
+        return main === this._path.path;
     }
 
     render() {

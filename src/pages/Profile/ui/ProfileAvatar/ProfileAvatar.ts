@@ -15,7 +15,7 @@ const avatarSelector = (state: Indexed) => {
 
     return {
         Avatar: new Avatar({
-            src: getResoursePath(user.avatar),
+            src: getResoursePath(user?.avatar),
             initials: getInitials(user),
             size: 'xlarge',
         }),
