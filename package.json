@@ -14,7 +14,8 @@
         "lint:fix": "eslint '**/*.ts' '**/*.js' --fix",
         "lint:styles": "stylelint \"**/*.css\"",
         "lint:styles:fix": "stylelint \"**/*.css\" --fix",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "typecheck": "tsc --noEmit"
     },
     "author": "",
     "license": "ISC",

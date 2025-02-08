@@ -74,6 +74,8 @@ export abstract class Block<Props extends Indexed = Indexed> {
     protected componentDidMount() {}
 
     protected componentDidUpdate(oldProps: Props, newProps: Props): boolean {
+        console.log(typeof oldProps, typeof newProps);
+
         return true;
     }
 
