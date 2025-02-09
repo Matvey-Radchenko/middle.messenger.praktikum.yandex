@@ -13,7 +13,7 @@ export class ChatPreview extends Block {
                 size: 'medium',
             }),
             onclick: () => {
-                Router.instance.go(`/chat/${props.id}`);
+                Router.instance.go(`/messenger/${props.id}`);
             },
         });
     }

@@ -6,7 +6,7 @@ export class InternalServerErrorPage extends ErrorScreen {
         super({
             code: 500,
             message: 'Ошибка на стороне сервера. Бежим чинить',
-            link: new Link({ text: 'Назад к чатам', href: '/chat' }),
+            link: new Link({ text: 'Назад к чатам', href: '/messenger' }),
         });
     }
 }

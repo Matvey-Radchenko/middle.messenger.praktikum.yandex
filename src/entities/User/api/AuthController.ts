@@ -9,7 +9,7 @@ class AuthController {
         return AuthAPI.signup(user).then((response) => {
             if (response.ok) {
                 this.getUser().then(() => {
-                    Router.instance.go('/chat');
+                    Router.instance.go('/messenger');
                 });
             }
         });
@@ -21,7 +21,7 @@ class AuthController {
             if (response.ok) {
                 this.getUser().then((response) => {
                     if (response?.ok) {
-                        Router.instance.go('/chat');
+                        Router.instance.go('/messenger');
                     }
                 });
             }

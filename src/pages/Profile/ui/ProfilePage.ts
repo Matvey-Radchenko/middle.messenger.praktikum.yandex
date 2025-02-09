@@ -33,7 +33,7 @@ class ProfilePage extends Block<ProfilePageProps> {
             editMode: false,
             BackLink: new Link({
                 text: '❮ Назад',
-                href: '/chat',
+                href: '/messenger',
             }),
             UserAttributes,
             UserAvatar: new ProfileAvatar({

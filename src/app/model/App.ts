@@ -25,10 +25,12 @@ export class App extends Block {
 
         AuthController.getUser().finally(() => {
             this.router
-                .use('/login', LogInPage)
-                .use('/create-account', CreateAccountPage)
-                .use('/chat/:id', ChatPage, { requiredAuth: true })
-                .use('/profile', ProfilePage as BlockConstructor, { requiredAuth: true })
+                .use('/', LogInPage, { prohibitedWhenLoggedIn: true })
+                .use('/sign-up', CreateAccountPage, {
+                    prohibitedWhenLoggedIn: true,
+                })
+                .use('/messenger/:id', ChatPage, { requiredAuth: true })
+                .use('/settings', ProfilePage as BlockConstructor, { requiredAuth: true })
                 .use('/500', InternalServerErrorPage)
                 .use('/401', UnauthorizedErrorPage)
                 .use('/404', NotFoundErrorPage)
