@@ -8,7 +8,6 @@ import { Chat, WSChatConnector } from '@entities/Chat';
 import { ChatFeed } from './ChatFeed/ChatFeed';
 import { ChatFooter } from '@pages/Chat/ui/ChatFooter/ChatFooter';
 import './ChatPage.css';
-import { Message } from 'postcss';
 
 export class ChatPage extends Block {
     _connector: WSChatConnector;
