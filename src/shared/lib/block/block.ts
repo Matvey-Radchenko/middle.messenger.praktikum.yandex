@@ -100,7 +100,9 @@ export abstract class Block<Props extends Indexed = Indexed> {
     }
 
     private _compile() {
-        const childrenEntries = Object.entries(this.children);
+        const childrenEntries = Object.entries(this.children).filter(
+            ([_, blocks]) => blocks[0] instanceof Block
+        );
 
         const stubs = childrenEntries.reduce(
             (acc, [key, blocks]) => {

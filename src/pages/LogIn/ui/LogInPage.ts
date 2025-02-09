@@ -5,12 +5,6 @@ import { UserForm } from '@features/UserForm';
 import { Button, Modal, TextInput } from '@shared/ui';
 
 export class LogInPage extends Block {
-    async handleSubmit(event: SubmitEvent) {
-        event.preventDefault();
-        const data = Object.fromEntries(new FormData(event.target as HTMLFormElement));
-        AuthController.signin(data as LogInData);
-    }
-
     constructor() {
         super({
             modal: new Modal({
@@ -27,7 +21,7 @@ export class LogInPage extends Block {
                         }),
                         new Button({
                             text: 'Нет аккаунта?',
-                            onclick: () => Router.instance.go('/create-account'),
+                            onclick: () => Router.instance.go('/sign-up'),
                             link: true,
                         }),
                     ],
@@ -35,6 +29,13 @@ export class LogInPage extends Block {
                 }),
             }),
         });
+    }
+
+    async handleSubmit(event: SubmitEvent) {
+        event.preventDefault();
+
+        const data = Object.fromEntries(new FormData(event.target as HTMLFormElement));
+        AuthController.signin(data as LogInData);
     }
 
     render() {

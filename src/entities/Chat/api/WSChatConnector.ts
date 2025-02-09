@@ -4,16 +4,18 @@ import { Store } from '@shared/lib';
 import { loadingDecorator } from '@shared/ui';
 
 export class WSChatConnector {
-    userId: number;
+    _userId: number;
+    _chatId?: number;
     tokens: Record<number, string> = {};
     private _socket: WebSocket | null = null;
 
     constructor(userId: number) {
-        this.userId = userId;
+        this._userId = userId;
     }
 
     @loadingDecorator('Устанавливаем соединение...')
     async connect(chatId: number) {
+        this._chatId = chatId;
         let token = this.tokens[chatId];
 
         if (!token) {
@@ -26,7 +28,7 @@ export class WSChatConnector {
         }
 
         const socket = new WebSocket(
-            `wss://ya-praktikum.tech/ws/chats/${this.userId}/${chatId}/${token}`
+            `wss://ya-praktikum.tech/ws/chats/${this._userId}/${chatId}/${token}`
         );
 
         this._socket = socket;
@@ -63,7 +65,7 @@ export class WSChatConnector {
     handleMessage(event: MessageEvent) {
         const data = JSON.parse(event.data);
 
-        if (Array.isArray(data) && data[0].type === 'message') {
+        if (Array.isArray(data) && data[0]?.type === 'message') {
             Store.set('messages', data);
         } else if (data.type === 'message') {
             Store.set('messages', [data, ...Store.getState<Array<Message>>('messages')]);
@@ -71,6 +73,7 @@ export class WSChatConnector {
     }
 
     /** limit фиксированный (20) */
+    @loadingDecorator('Загружаем сообщения...')
     getMessages(offset: number) {
         this._socket?.send(
             JSON.stringify({

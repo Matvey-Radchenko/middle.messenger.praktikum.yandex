@@ -1,21 +1,25 @@
 import { Block, debounce, Router, Store } from '@shared/lib';
-import { Button, Link, TextInput } from '@shared/ui';
+import { Link, TextInput } from '@shared/ui';
 import { User } from '@entities';
 import { ChatController } from '@entities/Chat/api/ChatController';
 import { ChatsList } from './ChatsList/ChatsList';
 import { ChatHeader } from './ChatHeader/ChatHeader';
 import { Chat, WSChatConnector } from '@entities/Chat';
 import { ChatFeed } from './ChatFeed/ChatFeed';
+import { ChatFooter } from '@pages/Chat/ui/ChatFooter/ChatFooter';
 import './ChatPage.css';
+import { Message } from 'postcss';
 
 export class ChatPage extends Block {
     _connector: WSChatConnector;
 
     constructor() {
+        const connector = new WSChatConnector(Store.getState<User>('user').id);
+
         super({
             ToProfileLink: new Link({
                 text: 'Профиль',
-                href: '/profile',
+                href: '/settings',
                 type: 'secondary',
             }),
             SearchInput: new TextInput({
@@ -28,28 +32,14 @@ export class ChatPage extends Block {
             ChatsList: new ChatsList(),
             ChatHeader: new ChatHeader(),
             ChatFeed: new ChatFeed(),
-            MessageInput: new TextInput({
-                placeholder: 'Сообщение',
-                name: 'message',
-                type: 'text',
-                view: 'filled',
-                onkeydown: (e: KeyboardEvent) => {
-                    if (e.key === 'Enter') {
-                        this.handleSend();
-                    }
-                },
-            }),
-            SendMessageButton: new Button({
-                text: '→',
-                class: 'primary',
-                round: true,
-                onclick: () => this.handleSend(),
-            }),
+            ChatFooter: new ChatFooter({ connector }),
         });
 
-        this._connector = new WSChatConnector(Store.getState<User>('user').id);
+        this._connector = connector;
 
         Router.instance.onChange(({ param }) => {
+            Store.set('messages', []);
+
             const chatId = Number(param);
             const chat = Store.getState<Array<Chat>>('chats').find(
                 (chat) => chat.id === chatId
@@ -63,19 +53,6 @@ export class ChatPage extends Block {
             this._connector.disconnect();
             this._connector.connect(chatId);
         });
-    }
-
-    handleSend() {
-        const input = this.children.MessageInput[0] as TextInput;
-        const inputElement = input.element.firstElementChild as HTMLInputElement;
-        const message = inputElement.value?.trim();
-
-        if (message === '') {
-            return;
-        }
-
-        inputElement.value = '';
-        this._connector.sendMessage(message);
     }
 
     @debounce(1000)
@@ -98,10 +75,7 @@ export class ChatPage extends Block {
                 <div class="chat-block">
                     {{{ ChatHeader }}}
                     {{{ ChatFeed }}}
-                    <footer class="chat-block__footer">
-                        {{{ MessageInput }}}
-                        {{{ SendMessageButton }}}
-                    </footer>
+                    {{{ ChatFooter }}}
                 </div>
             </div>
         `;
