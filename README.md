@@ -72,9 +72,9 @@ src/
 
 Netlify: https://dashing-kashata-cb33c9.netlify.app  
 • [Авторизация](https://dashing-kashata-cb33c9.netlify.app/login)  
-• [Регистрация](https://dashing-kashata-cb33c9.netlify.app/create-account)  
+• [Регистрация](https://dashing-kashata-cb33c9.netlify.app/sign-up)  
 • [Список чатов и просмотр переписки](https://dashing-kashata-cb33c9.netlify.app/chat)  
-• [Профиль пользователя](https://dashing-kashata-cb33c9.netlify.app/profile)  
+• [Профиль пользователя](https://dashing-kashata-cb33c9.netlify.app/settings)  
 • [404](https://dashing-kashata-cb33c9.netlify.app/404)  
 • [500](https://dashing-kashata-cb33c9.netlify.app/500)
 

@@ -74,18 +74,26 @@ export class Router {
 
         if (!route && this.currentPath === '/') {
             console.warn('Router. На корневом пути нет страницы');
-            const route = this._isAuth
+            const fallbackRoute = this._isAuth
                 ? this.routes.find((route) => route.requiredAuth) || this.routes[0]
                 : this.routes[0];
-
-            this.go(route.pathname.full);
+            this.go(fallbackRoute.pathname.full);
             return;
         }
 
         if (!route) {
-            console.warn('Router. Страница по данному пути не найдена:', pathname);
+            console.warn('Router. Страница по данному пути не найдена:', pathname);
             this.go(this._pageNotFoundPath);
             return;
+        }
+
+        if (this._isAuth && route.prohibitedWhenLoggedIn) {
+            console.warn('Router. Доступ запрещён для авторизованных пользователей');
+            const targetRoute = this.routes.find((r) => r.requiredAuth);
+            if (targetRoute) {
+                this.go(targetRoute.pathname.full);
+                return;
+            }
         }
 
         if (!this._isAuth && route.requiredAuth) {
@@ -95,7 +103,6 @@ export class Router {
         }
 
         this._currentRoute = route;
-
         route.render();
     }
 

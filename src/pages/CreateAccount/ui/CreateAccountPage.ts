@@ -29,7 +29,7 @@ export class CreateAccountPage extends Block {
                         }),
                         new Button({
                             text: 'Войти',
-                            onclick: () => Router.instance.go('/login'),
+                            onclick: () => Router.instance.go('/'),
                             link: true,
                         }),
                     ],

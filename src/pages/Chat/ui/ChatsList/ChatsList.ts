@@ -44,7 +44,6 @@ export class ChatsList extends Block<ChatListProps> {
                 children: new AddChatForm(),
                 darkBackdrop: true,
                 closable: true,
-                onclose: () => console.log('close'),
             }),
         });
 

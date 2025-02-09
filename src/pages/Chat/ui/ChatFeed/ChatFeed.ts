@@ -9,11 +9,7 @@ type ChatFeedProps = {
 
 @StoreConnector<ChatFeedProps>((state) => {
     const user = state.user as User;
-    const messages = state.messages as Array<Message>;
-
-    if (!messages?.length) {
-        return {};
-    }
+    const messages = (state.messages as Array<Message>) || [];
 
     return {
         Messages: messages?.map((message) => {
