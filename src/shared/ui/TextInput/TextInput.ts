@@ -26,7 +26,9 @@ export class TextInput extends Block {
         const value = (this.element.firstElementChild as HTMLInputElement).value.trim();
         const isValid = this.regExp.test(value);
 
-        this.setProps({ value, isValid });
+        setTimeout(() => {
+            this.setProps({ value, isValid });
+        }, 10);
 
         return isValid;
     }

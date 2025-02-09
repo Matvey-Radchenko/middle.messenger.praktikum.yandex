@@ -6,7 +6,7 @@ export class UnauthorizedErrorPage extends ErrorScreen {
         super({
             code: 401,
             message: 'Вы недостаточно авторизованы',
-            link: new Link({ text: 'Войти', href: '/login' }),
+            link: new Link({ text: 'Войти', href: '/' }),
         });
     }
 }

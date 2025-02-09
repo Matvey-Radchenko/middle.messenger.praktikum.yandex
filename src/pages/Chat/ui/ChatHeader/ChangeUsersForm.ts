@@ -46,7 +46,7 @@ export class ChangeUsersForm extends Block<ChangeUsersFormProps> {
             return;
         }
 
-        ChatController.addUsersToChat({
+        ChatController[this.props.isAdding ? 'addUsersToChat' : 'deleteUsersFromChat']({
             chatId: Number(this.props.currentChat?.id),
             users: users.map((user) => user.id),
         });
