@@ -1,0 +1,10 @@
+.chat-feed {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    flex-grow: 1;
+    gap: 10px;
+    justify-content: end;
+
+    padding: 15px 20px;
+}

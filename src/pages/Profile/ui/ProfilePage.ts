@@ -1,127 +1,51 @@
-import { User, USER_REG_EXPS } from '@entities';
-import { Block } from '@shared/lib';
-import { AttributeRow, Avatar, Button, Link, TextInput } from '@shared/ui';
+import { Block, StoreConnector, Store, isEqual, omit } from '@shared/lib';
+import { Button, Link, Modal, TextInput } from '@shared/ui';
 import { USER_PROP_NAMES } from '../../../entities/User/model/userPropNames';
+import { AuthController, UpdateUserPassword, User, UserController } from '@entities/User';
+import { ProfilePageProps } from '../model/types/ProfilePageProps';
+import { userSelector } from '@pages/Profile/model/userSelector';
+import { USER_PROFILE_INPUTS } from '@pages/Profile/model/userProfileInputs';
+import { PASSWORD_INPUTS } from '@pages/Profile/model/passwordInputs';
+import { ProfileAvatar } from '@pages/Profile/ui/ProfileAvatar/ProfileAvatar';
+import { FileForm } from '@features/FileForm/FileForm';
 import './ProfilePage.css';
 
-export class ProfilePage extends Block {
-    user: User;
+@StoreConnector<ProfilePageProps>(userSelector)
+class ProfilePage extends Block<ProfilePageProps> {
+    editMode?: 'user' | 'password' = 'user';
 
-    setUser;
-    logOut;
-    editMode?: 'user' | 'password';
+    constructor() {
+        const { UserAttributes, ...user } = userSelector(Store.getState());
 
-    setModeEdit(mode: typeof this.editMode) {
-        let inputs;
-
-        if (mode === 'user') {
-            inputs = (
-                [
-                    {
-                        name: 'email',
-                        type: 'email',
-                        validation: USER_REG_EXPS.email,
-                    },
-                    { name: 'login', type: 'text', validation: USER_REG_EXPS.login },
-                    {
-                        name: 'first_name',
-                        type: 'text',
-                        validation: USER_REG_EXPS.first_name,
-                    },
-                    {
-                        name: 'second_name',
-                        type: 'text',
-                        validation: USER_REG_EXPS.second_name,
-                    },
-                    {
-                        name: 'display_name',
-                        type: 'text',
-                        validation: USER_REG_EXPS.display_name,
-                    },
-                    { name: 'phone', type: 'tel', validation: USER_REG_EXPS.phone },
-                ] as const
-            ).map(
-                (input) =>
-                    new TextInput({
-                        ...input,
-                        value: this.user[input.name],
-                        placeholder: USER_PROP_NAMES[input.name],
-                    })
-            );
-        } else {
-            inputs = (
-                [
-                    { name: 'password', type: 'password', placeholder: 'Старый пароль' },
-                    {
-                        name: 'new_password',
-                        type: 'password',
-                        placeholder: 'Новый пароль',
-                        validation: USER_REG_EXPS.password,
-                    },
-                    {
-                        name: 'new_password_repeat',
-                        type: 'password',
-                        placeholder: 'Повторите новый пароль',
-                        validation: USER_REG_EXPS.password,
-                    },
-                ] as const
-            ).map(
-                ({ name, type, placeholder }) =>
-                    new TextInput({
-                        name,
-                        type,
-                        placeholder,
-                    })
-            );
-        }
-
-        this.setProps({
-            editMode: true,
-            inputs,
+        const fileForm = new FileForm({
+            accept: 'image/*',
+            onsubmit: (file: File) => {
+                return UserController.updateAvatar(file).then((response) => {
+                    (this.children.FileModal[0] as Modal).close();
+                    return response;
+                });
+            },
         });
-    }
 
-    setModeRead() {
-        this.setProps({ editMode: false });
-    }
-
-    handleSumbit(e: SubmitEvent) {
-        e.preventDefault();
-
-        const data = Object.fromEntries(new FormData(e.target as HTMLFormElement));
-        console.log(data);
-
-        const isValid = this.children.inputs.every((input) =>
-            (input as TextInput).validate()
-        );
-
-        if (!isValid) {
-            return;
-        }
-
-        // this.setUser?.(data as User);
-
-        this.setModeRead();
-    }
-
-    constructor(user: User, setUser: (user: User) => void, logOut: () => void) {
         super({
             ...user,
             onsubmit: (e: SubmitEvent) => this.handleSumbit(e),
             editMode: false,
-            backLink: new Link({
-                text: '< назад',
-                href: '/chat',
+            BackLink: new Link({
+                text: '❮ Назад',
+                href: '/messenger',
             }),
-            userAvatar: new Avatar({
-                src: 'https://sun1-47.userapi.com/s/v1/ig2/J4tV5J9d2XW2_HeaoE_tHhBMNbrTvy7h5zjPbgYw-7opMxvybxS49Ig7cOUnr0gVEA9uGUJDZGlvfrRrwDpQGb8o.jpg?quality=95&as=32x31,48x46,72x69,108x104,160x154,240x231,360x346,480x462,540x519,640x616,720x693,735x707&from=bu&u=p8W56VA_LlspHhMGsdv9mUjamvyE-yDxtoGME6PDIZA&cs=604x581',
-                initials: 'CG',
-                size: 'xlarge',
+            UserAttributes,
+            UserAvatar: new ProfileAvatar({
+                onclick: () => (this.children.FileModal[0] as Modal).open(),
             }),
-            userAttributes: (Object.entries(user) as Array<[keyof User, string]>).map(
-                ([key, value]) => new AttributeRow({ name: USER_PROP_NAMES[key], value })
-            ),
-            actions: (
+            FileModal: new Modal({
+                children: fileForm,
+                darkBackdrop: true,
+                closable: true,
+                onclose: () => fileForm.reset(),
+            }),
+            ReadModeActions: (
                 [
                     {
                         text: 'Изменить данные',
@@ -139,44 +63,102 @@ export class ProfilePage extends Block {
                         text: 'Выйти',
                         class: 'danger',
                         size: 'sm',
-                        onclick: () => this.logOut(),
+                        onclick: () => AuthController.logout(),
                     },
                 ] as const
             ).map((action) => new Button(action)),
-            saveButton: new Button({
-                text: 'Сохранить',
-                class: 'primary',
-                size: 'sm',
-                type: 'submit',
-            }),
+            EditModeActions: [
+                new Button({
+                    text: 'Сохранить',
+                    class: 'primary',
+                    size: 'sm',
+                    type: 'submit',
+                }),
+                new Button({
+                    text: 'Отмена',
+                    class: 'secondary',
+                    size: 'sm',
+                    type: 'reset',
+                    onclick: () => this.setModeRead(),
+                }),
+            ],
         });
+    }
 
-        this.user = user;
-        this.setUser = setUser;
-        this.logOut = logOut;
+    setModeEdit(mode: typeof this.editMode) {
+        this.editMode = mode;
+
+        let inputs;
+        const user = Store.getState<User>('user');
+
+        if (mode === 'user') {
+            inputs = USER_PROFILE_INPUTS.map(
+                (input) =>
+                    new TextInput({
+                        ...input,
+                        value: user[input.name] || '',
+                        placeholder: USER_PROP_NAMES[input.name],
+                    })
+            );
+        } else {
+            inputs = PASSWORD_INPUTS.map((input) => new TextInput(input));
+        }
+
+        this.setProps({
+            editMode: true,
+            Inputs: inputs,
+        });
+    }
+
+    setModeRead() {
+        this.setProps({ editMode: false });
+    }
+
+    handleSumbit(e: SubmitEvent) {
+        const data = Object.fromEntries(new FormData(e.target as HTMLFormElement));
+        const currentUser = Store.getState<User>('user');
+
+        const isValid = this.children.Inputs.every((input) =>
+            (input as TextInput).validate()
+        );
+
+        if (!isValid) {
+            return;
+        }
+
+        if (this.editMode === 'user') {
+            if (!isEqual(data, omit(currentUser, ['avatar', 'id']))) {
+                UserController.updateProfile(data as unknown as User);
+            }
+        } else {
+            UserController.updatePassword(data as UpdateUserPassword);
+        }
+
+        this.setModeRead();
     }
 
     render() {
         return `
             <div class="profile-page">
                 <div class="profile-page__return-link">
-                    {{{ backLink }}}
+                    {{{ BackLink }}}
                 </div>
                 <main class="profile-page__content">
-                    {{{ userAvatar }}}
+                    {{{ UserAvatar }}}
+                    {{{ FileModal }}}
                     <h4>{{display_name}}</h4>
                         {{#if editMode}}
                             <form>
-                                {{{ inputs }}}
+                                {{{ Inputs }}}
                                 <div class="actions">
-                                    {{{ saveButton }}}
+                                    {{{ EditModeActions }}}
                                 </div>
                             </form>
                         {{else}}
                             <section>
-                                {{{ userAttributes }}}
+                                {{{ UserAttributes }}}
                                 <div class="actions">
-                                    {{{ actions }}}
+                                    {{{ ReadModeActions }}}
                                 </div>
                             </section>
                         {{/if}}
@@ -185,3 +167,5 @@ export class ProfilePage extends Block {
         `;
     }
 }
+
+export { ProfilePage };

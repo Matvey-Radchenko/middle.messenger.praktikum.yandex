@@ -39,7 +39,7 @@
 
     &__message-body {
         display: flex;
-        gap: 2px;
+        gap: 4px;
         align-items: center;
         margin-top: 5px;
 

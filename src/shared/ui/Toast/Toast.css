@@ -1,0 +1,62 @@
+@keyframes slide-in {
+    0% {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out {
+    0% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+    }
+}
+
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+
+    min-width: 300px;
+    padding: 12px 24px;
+
+    font-size: var(--font-size-base, 16px);
+    color: var(--text-color, #1e1e1e);
+
+    /* Начальное состояние (на случай, если ни visible, ни hidden не применены) */
+    opacity: 0;
+    background-color: var(--background-color, #fff);
+    border-radius: var(--border-radius-base, 4px);
+    box-shadow: var(--shadow-regular, 0 0 6px rgb(0 0 0 / 24%));
+}
+
+/* Если тост должен появиться – проигрываем анимацию появления */
+.toast.visible {
+    animation: slide-in 0.5s forwards;
+}
+
+/* Если тост скрывается – проигрываем анимацию исчезания */
+.toast.hidden {
+    animation: slide-out 0.5s forwards;
+}
+
+/* Оформление для ошибок */
+.toast.error {
+    border-left: 6px solid var(--danger-color, #f44336);
+}
+
+/* Оформление для предупреждений */
+.toast.warning {
+    border-left: 6px solid var(--primary-color, #3369f3);
+}

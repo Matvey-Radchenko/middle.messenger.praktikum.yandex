@@ -8,7 +8,7 @@ import prettierPlugin from 'eslint-plugin-prettier';
 export default [
     prettierConfig,
     {
-        files: ['**/*.{js,mjs,cjs,ts}'],
+        files: ['**/*.{js,mjs,cjs,ts,tsx}'],
         languageOptions: {
             parser: tsParser,
             globals: globals.browser,
@@ -25,6 +25,7 @@ export default [
             '@typescript-eslint/no-explicit-any': 'warn',
             '@typescript-eslint/no-unused-vars': 'warn',
             'prettier/prettier': 'error',
+            'no-undef': 'off',
         },
     },
     {

@@ -1,68 +1,82 @@
-import { Block } from '@shared/lib';
-import { Avatar, Button, Link, TextInput } from '@shared/ui';
-import { ChatPreview, Message } from '@entities';
-import { CHATS_MOCK_DATA } from '../lib/const/chatsMockData';
-import { MESSAGES_MOCK_DATA } from '../lib/const/messagesMockData';
+import { Block, debounce, Router, Store } from '@shared/lib';
+import { Link, TextInput } from '@shared/ui';
+import { User } from '@entities';
+import { ChatController } from '@entities/Chat/api/ChatController';
+import { ChatsList } from './ChatsList/ChatsList';
+import { ChatHeader } from './ChatHeader/ChatHeader';
+import { Chat, WSChatConnector } from '@entities/Chat';
+import { ChatFeed } from './ChatFeed/ChatFeed';
+import { ChatFooter } from '@pages/Chat/ui/ChatFooter/ChatFooter';
 import './ChatPage.css';
 
 export class ChatPage extends Block {
+    _connector: WSChatConnector;
+
     constructor() {
+        const connector = new WSChatConnector(Store.getState<User>('user').id);
+
         super({
-            toProfileLink: new Link({
+            ToProfileLink: new Link({
                 text: 'Профиль',
-                href: '/profile',
+                href: '/settings',
                 type: 'secondary',
             }),
-            searchInput: new TextInput({
+            SearchInput: new TextInput({
                 placeholder: 'Поиск',
                 name: 'search',
                 type: 'text',
                 view: 'filled',
+                oninput: (e: Event) => this.handleSearchChange(e),
             }),
-            chats: CHATS_MOCK_DATA.map((chat) => new ChatPreview(chat)),
-            avatar: new Avatar({
-                src: 'https://img.kupigolos.ru/hero/623e8f7ef3bba.jpg?p=bh&s=7a483e895f3c8ef1120cd83b8047e414',
-                initials: 'BS',
-                size: 'small',
-            }),
-            messages: MESSAGES_MOCK_DATA.map((message) => new Message(message)),
-            messageInput: new TextInput({
-                placeholder: 'Сообщение',
-                name: 'message',
-                type: 'text',
-                view: 'filled',
-            }),
-            sendMessageButton: new Button({ text: '→', class: 'primary', round: true }),
+            ChatsList: new ChatsList(),
+            ChatHeader: new ChatHeader(),
+            ChatFeed: new ChatFeed(),
+            ChatFooter: new ChatFooter({ connector }),
         });
+
+        this._connector = connector;
+
+        Router.instance.onChange(({ param }) => {
+            Store.set('messages', []);
+
+            const chatId = Number(param);
+            const chat = Store.getState<Array<Chat>>('chats').find(
+                (chat) => chat.id === chatId
+            );
+
+            if (!chat) {
+                return;
+            }
+
+            Store.set('currentChat', chat);
+            this._connector.disconnect();
+            this._connector.connect(chatId);
+        });
+    }
+
+    @debounce(1000)
+    handleSearchChange(e: Event) {
+        const title = (e.target as HTMLInputElement).value;
+
+        ChatController.getChats({ title, offset: 0, limit: 100 });
     }
 
     render() {
         return `
-        <div class="chat-page">
-            <sidebar class="left-panel">
-                <div class="left-panel__header">
-                    {{{ toProfileLink }}}
-                    {{{ searchInput }}} 
+            <div class="chat-page">
+                <sidebar class="left-panel">
+                    <div class="left-panel__header">
+                        {{{ ToProfileLink }}}
+                        {{{ SearchInput }}} 
+                    </div>
+                    {{{ ChatsList }}}
+                </sidebar>
+                <div class="chat-block">
+                    {{{ ChatHeader }}}
+                    {{{ ChatFeed }}}
+                    {{{ ChatFooter }}}
                 </div>
-                <div class="chat-list">
-                    {{{ chats }}}
-                </div>
-            </sidebar>
-
-            <div class="chat-block">
-                <header class="chat-block__header">
-                    {{{ avatar }}}
-                    <h4>Винсент Вега</h4>
-                </header>
-                <main class="chat-block__content">
-                    {{{ messages }}}
-                </main>
-                <footer class="chat-block__footer">
-                    {{{ messageInput }}}
-                    {{{ sendMessageButton }}}
-                </footer>
             </div>
-        </div>
         `;
     }
 }

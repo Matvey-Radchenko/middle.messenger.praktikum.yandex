@@ -1,101 +1,85 @@
-import './customHistory';
-import { CreateAccountPage, LogInPage, ChatPage, ErrorScreen, ProfilePage } from '@pages';
-import { User } from '@entities';
-import { Block } from '@shared/lib';
-import { Link } from '@shared/ui';
+import { CreateAccountPage, LogInPage, ChatPage, ProfilePage } from '@pages';
+import { Block, BlockConstructor, Router, Store } from '@shared/lib';
+import {
+    InternalServerErrorPage,
+    NotFoundErrorPage,
+    UnauthorizedErrorPage,
+} from '@pages/ErrorScreens';
+import { AuthController } from '@entities/User';
+import { LoadingScreen } from '@shared/ui';
+import { Toast, ToastProps } from '@shared/ui';
+import { isHTTPResponse } from '@shared/lib/HTTPTransport/types';
 
-export class App {
-    rootElement: HTMLElement;
-    user?: User;
-
-    get route() {
-        return window.location.pathname;
-    }
+export class App extends Block {
+    router = new Router({
+        rootQuery: '#app',
+        unauthorizedPath: '/401',
+        pageNotFoundPath: '/404',
+    });
 
     constructor() {
-        this.rootElement = document.getElementById('app')!;
-        this.attachListeners();
+        super({
+            LoadingScreen: new LoadingScreen(),
+            Toast: new Toast(),
+        });
 
-        if (!this.user && ['/chat', '/profile'].includes(this.route)) {
-            history.pushState(null, '', '/login');
-            alert('Cначала необходимо войти в аккаунт');
-            return;
-        }
+        AuthController.getUser().finally(() => {
+            this.router
+                .use('/', LogInPage, { prohibitedWhenLoggedIn: true })
+                .use('/sign-up', CreateAccountPage, {
+                    prohibitedWhenLoggedIn: true,
+                })
+                .use('/messenger/:id', ChatPage, { requiredAuth: true })
+                .use('/settings', ProfilePage as BlockConstructor, { requiredAuth: true })
+                .use('/500', InternalServerErrorPage)
+                .use('/401', UnauthorizedErrorPage)
+                .use('/404', NotFoundErrorPage)
+                .start();
+        });
 
-        if (this.route === '/') {
-            history.pushState(null, '', '/login');
-        }
+        this.attachEvents();
     }
 
-    logOut() {
-        this.user = undefined;
-        history.pushState(null, '', '/login');
-    }
-
-    setUser(user: User) {
-        this.user = user;
-        // this.render();
-    }
-
-    handleAuth(data: User) {
-        this.setUser(data);
-        history.pushState(null, '', '/chat');
-    }
-
-    attachListeners() {
-        window.addEventListener('historychange', () => this.render());
-
-        document.addEventListener('click', (event) => {
-            const link = (event.target as HTMLElement).closest('[data-link]');
-
-            if (link) {
+    attachEvents() {
+        window.addEventListener('click', (event) => {
+            const target = event.target as HTMLElement;
+            if (target.tagName === 'A') {
                 event.preventDefault();
-                history.pushState(null, '', link.getAttribute('href')!);
+            }
+        });
+
+        window.addEventListener('submit', (event) => {
+            const target = event.target as HTMLFormElement;
+            if (target.tagName === 'FORM') {
+                event.preventDefault();
+            }
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            console.warn('UnhandledRejection', event);
+
+            if (isHTTPResponse(event.reason)) {
+                const response = event.reason;
+
+                if (response.ok) {
+                    return;
+                }
+
+                Store.set('toast', {
+                    visible: true,
+                    message: `Ошибка: ${response.status} - ${response.error}`,
+                    type: 'error',
+                } as ToastProps);
             }
         });
     }
 
     render() {
-        const page = (
-            {
-                '/create-account': () =>
-                    new CreateAccountPage({
-                        onCreateAccount: this.handleAuth.bind(this),
-                    }),
-                '/login': () => new LogInPage({ onLogIn: this.handleAuth.bind(this) }),
-                '/chat': () => new ChatPage(),
-                '/profile': () =>
-                    new ProfilePage(
-                        this.user!,
-                        this.setUser.bind(this),
-                        this.logOut.bind(this)
-                    ),
-                '/500': () =>
-                    new ErrorScreen({
-                        code: 500,
-                        message: 'Куда я жмал?',
-                        link: new Link({ text: 'Назад к чатам', href: '/chat' }),
-                    }),
-                '/404': () =>
-                    new ErrorScreen({
-                        code: 404,
-                        message: 'Ты куда звóнишь, сынок?',
-                        link: new Link({ text: 'Назад к чатам', href: '/chat' }),
-                    }),
-            } as Record<string, () => Block>
-        )[this.route]?.();
-
-        if (!page) {
-            history.replaceState(null, '', '/404');
-            return;
-        }
-
-        if (this.rootElement.firstElementChild) {
-            this.rootElement.firstElementChild.replaceWith(page.element);
-        } else {
-            this.rootElement.appendChild(page.element);
-        }
-
-        page.dispatchComponentDidMount();
+        return `
+            <div id="app">
+                {{{ LoadingScreen }}}
+                {{{ Toast }}}
+            </div>
+        `;
     }
 }

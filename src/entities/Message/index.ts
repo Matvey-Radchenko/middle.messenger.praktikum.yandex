@@ -1,2 +1,2 @@
-export { Message } from './ui/Message';
-export { type MessageProps } from './model/MessageProps';
+export { MessageBubble } from './ui/MessageBubble';
+export { type Message } from './model/types/Message';

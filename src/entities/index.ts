@@ -1,4 +1,4 @@
-export { type User, USER_REG_EXPS, type LogInData, logIn, createUser } from './User';
+export { USER_REG_EXPS, USER_PROP_NAMES, type User, type LogInData } from './User';
 
-export { Message, type MessageProps } from './Message';
+export { MessageBubble } from './Message';
 export { ChatPreview, type ChatPreviewProps } from './Chat';
