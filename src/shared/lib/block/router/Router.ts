@@ -1,4 +1,5 @@
-import { BlockConstructor, Store } from '@shared/lib/block';
+import { BlockConstructor } from '../types/block';
+import { Store } from '../store';
 import { Route, RouteProps } from './Route';
 import { StoreEvents } from '../store/types/StoreEvents';
 import { EventBus } from '../eventBus';
