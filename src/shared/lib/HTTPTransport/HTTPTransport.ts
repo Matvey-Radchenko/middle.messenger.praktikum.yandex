@@ -1,7 +1,7 @@
 import { RequestOptions, OptionsWithoutMethod, HTTPResponse } from './types';
 import { METHODS } from './methods';
 import { queryStringify } from '../utils/queryStringify';
-import { isPlainObject } from '@shared/lib';
+import { isPlainObject } from '../utils/isPlainObject';
 
 export class HTTPTransport {
     baseUrl: string;

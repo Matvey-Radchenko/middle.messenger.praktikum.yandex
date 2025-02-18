@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { Router } from '../Router';
 import { Block } from '../../block';
+import Store from '../../store/store';
 
 // Создаем мок-компонент для тестов
 class MockComponent extends Block {
@@ -13,17 +14,20 @@ describe('Router', () => {
     let router: Router;
 
     beforeEach(() => {
-        // Сбрасываем синглтон перед каждым тестом
-        (Router as any).__instance = undefined;
-
         router = new Router({
             rootQuery: '#app',
             unauthorizedPath: '/sign-in',
             pageNotFoundPath: '/404',
         });
 
-        // Добавляем страницу 404
         router.use('/404', MockComponent);
+
+        router.go('/');
+    });
+
+    afterEach(() => {
+        Router.reset();
+        document.body.innerHTML = '';
     });
 
     it('should be a singleton', () => {
@@ -42,31 +46,103 @@ describe('Router', () => {
 
         router.go('/test');
 
-        expect(window.location.pathname).to.equal('/test');
+        expect(router.currentPath).to.equal('/test');
     });
 
-    it('should handle back navigation', (done) => {
-        router.use('/test1', MockComponent);
-        router.use('/test2', MockComponent);
-        router.start();
+    it('should handle back navigation', function (done) {
+        router.use('/test1', MockComponent).use('/test2', MockComponent).start();
 
         router.go('/test1');
+        router.go('/test2');
+        router.back();
 
-        // Добавляем небольшую задержку перед следующей навигацией
         setTimeout(() => {
-            router.go('/test2');
+            expect(router.currentPath).to.equal('/test1');
+            done();
+        }, 100);
+    });
 
-            // Добавляем обработчик события popstate
-            const onPopState = () => {
-                window.removeEventListener('popstate', onPopState);
-                // Поскольку роутер перенаправляет на /404 при отсутствии маршрута,
-                // мы ожидаем /404 вместо /test1
-                expect(window.location.pathname).to.equal('/404');
+    it('should handle forward navigation', function (done) {
+        router.use('/test1', MockComponent).use('/test2', MockComponent).start();
+
+        router.go('/test1');
+        router.go('/test2');
+        router.back();
+
+        setTimeout(() => {
+            expect(router.currentPath).to.equal('/test1');
+            router.forward();
+
+            setTimeout(() => {
+                expect(router.currentPath).to.equal('/test2');
                 done();
-            };
-            window.addEventListener('popstate', onPopState);
+            }, 100);
+        }, 100);
+    });
 
-            window.history.back();
+    it('should redirect to sign-in when accessing protected route without auth', function (done) {
+        Store.set('isAuth', false);
+
+        router
+            .use('/', MockComponent)
+            .use('/sign-in', MockComponent)
+            .use('/protected', MockComponent, { requiredAuth: true })
+            .start();
+
+        router.go('/protected');
+
+        setTimeout(() => {
+            expect(router.currentPath).to.equal('/sign-in');
+            done();
+        }, 100);
+    });
+
+    it('should allow access to protected route when authenticated', function (done) {
+        Store.set('isAuth', true);
+
+        router
+            .use('/', MockComponent)
+            .use('/protected', MockComponent, { requiredAuth: true })
+            .start();
+
+        router.go('/protected');
+
+        setTimeout(() => {
+            expect(router.currentPath).to.equal('/protected');
+            done();
+        }, 100);
+    });
+
+    it('should redirect from auth-only routes when logged in', function (done) {
+        Store.set('isAuth', true);
+
+        router
+            .use('/', MockComponent)
+            .use('/sign-in', MockComponent, { prohibitedWhenLoggedIn: true })
+            .start();
+
+        router.go('/sign-in');
+
+        setTimeout(() => {
+            // Должен редиректить на главную страницу, если пользователь авторизован
+            expect(router.currentPath).to.equal('/');
+            done();
+        }, 100);
+    });
+
+    it('should allow access to auth-only routes when not logged in', function (done) {
+        Store.set('isAuth', false);
+
+        router
+            .use('/', MockComponent)
+            .use('/sign-in', MockComponent, { prohibitedWhenLoggedIn: true })
+            .start();
+
+        router.go('/sign-in');
+
+        setTimeout(() => {
+            expect(router.currentPath).to.equal('/sign-in');
+            done();
         }, 100);
     });
 
@@ -74,10 +150,9 @@ describe('Router', () => {
         router.start();
         router.go('/non-existent');
 
-        // Используем done для асинхронного теста
         setTimeout(() => {
-            expect(window.location.pathname).to.equal('/404');
+            expect(router.currentPath).to.equal('/404');
             done();
-        }, 0);
+        }, 100);
     });
 });

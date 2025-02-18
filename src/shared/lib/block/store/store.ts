@@ -2,10 +2,10 @@
 // Этого требует typescript для конструирования классов mixin'ов в декораторах
 
 import { isEqual } from '../../utils/isEqual';
-import { set } from '@shared/lib/utils';
 import { EventBus } from '../eventBus';
 import { StoreEvents, StoreEventsMap } from './types/StoreEvents';
 import { BlockConstructor } from '../types/block';
+import { set } from '../../utils/set';
 
 class Store extends EventBus<StoreEventsMap> {
     private state: Indexed = {};
