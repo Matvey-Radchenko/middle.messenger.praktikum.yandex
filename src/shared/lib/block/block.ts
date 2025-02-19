@@ -74,7 +74,9 @@ export abstract class Block<Props extends Indexed = Indexed> {
     protected componentDidMount() {}
 
     protected componentDidUpdate(oldProps: Props, newProps: Props): boolean {
-        console.log(typeof oldProps, typeof newProps);
+        if (!oldProps || !newProps) {
+            console.warn('Block. Один из пропсов не был передан');
+        }
 
         return true;
     }
