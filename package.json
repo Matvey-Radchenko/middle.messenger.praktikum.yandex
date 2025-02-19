@@ -30,6 +30,9 @@
         "postcss": "^8.4.49",
         "uuid": "^11.0.3"
     },
+    "optionalDependencies": {
+        "@rollup/rollup-linux-x64-gnu": "4.9.5"
+    },
     "devDependencies": {
         "@eslint/js": "^9.17.0",
         "@types/chai": "^5.0.1",
