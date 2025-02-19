@@ -1,4 +1,5 @@
-import { BlockConstructor, Store } from '@shared/lib/block';
+import { BlockConstructor } from '../types/block';
+import { Store } from '../store';
 import { Route, RouteProps } from './Route';
 import { StoreEvents } from '../store/types/StoreEvents';
 import { EventBus } from '../eventBus';
@@ -9,10 +10,11 @@ type RouterEventsMap = {
 };
 
 export class Router {
-    static __instance: Router;
+    static __instance: Router | undefined;
     private _rootQuery!: string;
     private _unauthorizedPath!: string;
     private _pageNotFoundPath!: string;
+    private _popstateHandler?: (event: PopStateEvent) => void;
 
     private _currentRoute: Route | null = null;
     private _isAuth: boolean = false;
@@ -22,6 +24,10 @@ export class Router {
     history: History = window.history;
 
     public static get instance(): Router {
+        if (!Router.__instance) {
+            throw new Error('Router. Экземпляр не создан');
+        }
+
         return Router.__instance;
     }
 
@@ -89,7 +95,9 @@ export class Router {
 
         if (this._isAuth && route.prohibitedWhenLoggedIn) {
             console.warn('Router. Доступ запрещён для авторизованных пользователей');
-            const targetRoute = this.routes.find((r) => r.requiredAuth);
+            const targetRoute =
+                this.routes.find((r) => r.requiredAuth) ||
+                this.routes.find((r) => r.pathname.full === '/');
             if (targetRoute) {
                 this.go(targetRoute.pathname.full);
                 return;
@@ -127,9 +135,11 @@ export class Router {
             throw new Error('Router. Отсутствуют маршруты');
         }
 
-        window.addEventListener('popstate', (event) => {
+        this._popstateHandler = (event) => {
             this._onRoute((event.currentTarget as Window)?.location.pathname);
-        });
+        };
+
+        window.addEventListener('popstate', this._popstateHandler);
 
         this._onRoute(window.location.pathname);
     }
@@ -150,5 +160,13 @@ export class Router {
 
     onChange(callback: (value: RouterEventsMap[RouterEvents.PathChanged][0]) => void) {
         this.eventBus.on(RouterEvents.PathChanged, callback);
+    }
+
+    public static reset(): void {
+        if (Router.__instance && Router.__instance._popstateHandler) {
+            window.removeEventListener('popstate', Router.__instance._popstateHandler);
+        }
+
+        Router.__instance = undefined;
     }
 }

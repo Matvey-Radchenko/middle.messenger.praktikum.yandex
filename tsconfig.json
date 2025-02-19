@@ -27,5 +27,10 @@
         }
     },
     "include": ["src", "vite-env.d.ts"],
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules"],
+    "ts-node": {
+        "esm": true,
+        "experimentalSpecifierResolution": "node",
+        "transpileOnly": true
+    }
 }

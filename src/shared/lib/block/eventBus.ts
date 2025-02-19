@@ -24,11 +24,10 @@ export class EventBus<TEvents extends Record<string, any[]>> {
     emit<K extends keyof TEvents>(event: K, ...args: TEvents[K]): void {
         const listeners = this.listeners[event];
 
-        if (!listeners) {
-            console.warn(`Осутствуют обработчики события: ${String(event)}`);
+        if (!listeners?.length) {
             return;
         }
 
-        listeners.forEach((listener) => listener(...args));
+        listeners?.forEach((listener) => listener(...args));
     }
 }
